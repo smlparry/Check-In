@@ -7,4 +7,10 @@
 		<li></li>
 		<li></li>
 	</ul>
+	<?php
+	if(DB::connection()->getDatabaseName())
+	{
+	   echo "conncted sucessfully to database ".DB::connection()->getDatabaseName();
+	}
+	?>
 @stop
