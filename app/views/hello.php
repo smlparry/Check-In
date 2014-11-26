@@ -32,6 +32,7 @@
 			margin: 16px 0 0 0;
 		}
 	</style>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	<div class="welcome">

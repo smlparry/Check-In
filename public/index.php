@@ -34,6 +34,9 @@ require __DIR__.'/../bootstrap/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/start.php';
 
+// Run the sass auto compiler
+SassCompiler::run("../app/assets/sass/", "css/");
+
 /*
 |--------------------------------------------------------------------------
 | Run The Application
