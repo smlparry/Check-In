@@ -7,9 +7,11 @@
 			<div class="control-group">
 
 				<div class="controls">
-					{{ Form::hidden('id', Auth::id() ); }}
-					{{ Form::submit('Click Me!'); }}
+					{{ Form::hidden('id', Auth::id() ) }}
+					{{ Form::hidden('parent_id', $parentId ) }}
+					{{ Form::submit('Click Me!') }}
 				</div>
+				
 			</div>
 	{{ Form::close() }}
 @stop

@@ -15,7 +15,14 @@ Class UserTableSeeder extends Seeder {
 		                          'email' => "samuel@zaprri.com",
 		                          'password' => Hash::make('123'),
 		                          'group_id' => 2,
-		                          'unique_id' => str_random(8);
+		                          'unique_id' => '7BWgg4AK'
+					        ]); 
+		// Add the seeded records
+		DB::table('users')->insert([
+		                          'email' => "samuel.parry@bigpond.com",
+		                          'password' => Hash::make('123'),
+		                          'group_id' => 1,
+		                          'unique_id' => '7B2gg4AK'
 					        ]); 
 
 	}

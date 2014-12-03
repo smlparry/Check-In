@@ -5,9 +5,12 @@ class CheckinController extends \BaseController {
 	/*
 		Show the check in page
 	 */
-	public function index()
+	public function index( $uniqueId )
 	{
-		return View::make('checkin.before');
+		$checkInPrep = new Checkin;
+		$parentId = $checkInPrep->getParentId( $uniqueId );
+
+		return View::make('checkin.before', ['parentId' => $parentId ]);
 	}
 
 	/*
@@ -18,18 +21,21 @@ class CheckinController extends \BaseController {
 		// First check if the user is logged in
 		if ( Auth::check() ){
 
-			$checkin = new Feed;
-			$formId = Input::get('id');
+			$checkin = new Checkin;
+			$formId	= Input::get('id');
+			$parentId = Input::get('parent_id');
 			$authId = Auth::id();
 
 			// Validation
-			if ( $checkin->verifyAuth( $authId, $formId ) === true ){
+			if ( $checkin->verifyAuth( $authId, $formId ) === true 
+			  && $checkin->verifyGroupId( $parentId ) === true ){
 
 				// Add the record to the database
 				$checkin->user_id = $authId;
+				$checkin->parent_id = $parentId;
 				$checkin->save();
 
-				return 'it worked?';
+				return 'It worked';
 
 			}
 
