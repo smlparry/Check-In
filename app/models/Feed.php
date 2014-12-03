@@ -10,7 +10,20 @@ class Feed extends Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'users';
+	protected $table = 'feed';
+
+	/*
+		Simple function to verify the html in the form has not changed
+	 */
+	public function verifyAuth( $authId, $formId ){
+
+		if ( $authId == $formId ){
+			return true;
+		}
+
+		return false;
+
+	}
 
 
 }

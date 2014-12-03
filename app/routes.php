@@ -11,7 +11,7 @@ Route::post("/register", "UsersController@register");
 
 // Check in Routing
 Route::get('/checkin', 'CheckinController@index');
-Route::post('/checkin', 'CheckinContoller@after');
+Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 
 /*
 	Delete this one 
