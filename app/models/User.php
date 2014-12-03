@@ -39,17 +39,28 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/*
+		Rules for registration
+	 */
+	
+	public function rulesRegister(){
+		return array(
+		        'email' => 'Required|Email|Unique:users,email',
+				'password' => 'Required'
+			);
+	}
+
+	public function rulesLogin(){
+		return array(
+		        'email' => 'Required|Email',
+				'password' => 'Required'
+			);
+	}
+	/*
 		Check if the user data supplied is valid and ready to be registered
 	 */
 	
-	public function isValid( $userData )
+	public function isValid( $userData, $rules )
 	{
-
-		// Assign some rules for validation
-		$rules = [
-			'email' => 'Required|Email|Unique:users,email',
-			'password' => 'Required'
-		];
 
 		$validation = Validator::make( $userData, $rules );
 
@@ -98,7 +109,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 			return true;
 		}
 
-		return false;
+		return $this->errorMessages;
 	}
 
 }

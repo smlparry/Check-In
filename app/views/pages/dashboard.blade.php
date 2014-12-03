@@ -3,7 +3,7 @@
 @section("content")
 	<?php $success = Session::get( 'success' ) ?>
 	@if ( ! empty( $success ) )
-		<div class="alert alert-danger alert-block ">
+		<div class="alert alert-success alert-block ">
 			{{ $success }}
 		</div>
 	@endif

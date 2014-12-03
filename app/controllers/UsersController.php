@@ -32,19 +32,36 @@ class UsersController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		// Log the user in
+		$login = new User;
+		$userData = $login->userDataToArray( Input::all() );
+
+		// Check if the user data is valid
+		$rules = $login->rulesLogin();
+		$isValid = $login->isValid( $userData, $rules );
+		$logInResponse = $login->logUserIn( $userData );
+
+		if ( $isValid === true && $logInResponse === true ){
+
+			return Redirect::to('dash')->with('success', 'Logged In Succesfully');
+
+		} 
+
+		return Redirect::to('login')->with( 'errors', $logInResponse );
+
+
 	}
 
 
 	/**
-	 * Display the specified resource.
+	 * Show all the users
 	 *
-	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show()
 	{
-		//
+		$users = User::all();
+		return View::make( 'auth.users', ['users' => $users] );
 	}
 
 
@@ -89,22 +106,23 @@ class UsersController extends \BaseController {
 		// Pass onto class function
 		$register = new User;
 		$userData = $register->userDataToArray( Input::all() );
-		$isValid = $register->isValid( $userData );
+		$rules = $register->rulesRegister();
+		$isValid = $register->isValid( $userData, $rules );
 
- 	if ( $isValid === true ){
+	 	if ( $isValid === true ){
 
-	 	// Register the user
-	 	$register->registerUser( $userData );
+		 	// Register the user
+		 	$register->registerUser( $userData );
 
-	 	// Log the user in
-	 	$register->logUserIn( $userData );
+		 	// Log the user in
+		 	$register->logUserIn( $userData );
 
-	 	return Redirect::to('dash')->with( 'success', 'You have successfully logged in!' );
+		 	return Redirect::to('dash')->with( 'success', 'You have successfully logged in!' );
 
-	}
+		}
 
- 	// Else return with errors
-	return Redirect::to('register')->with( 'errors', $isValid );
+	 	// Else return with errors
+		return Redirect::to('register')->with( 'errors', $isValid );
 
 	}
 
