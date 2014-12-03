@@ -4,6 +4,7 @@ Design
 	- Font: Lato
 
 Core Functionality
+	/ Register a user  
 	- Log user in
 	- Check a user in
 	- Different user privilages

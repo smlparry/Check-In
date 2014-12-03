@@ -89,8 +89,9 @@ class UsersController extends \BaseController {
 		// Pass onto class function
 		$register = new User;
 		$userData = $register->userDataToArray( Input::all() );
+		$isValid = $register->isValid( $userData );
 
- 	if ( $register->isValid( $userData ) === true ){
+ 	if ( $isValid === true ){
 
 	 	// Register the user
 	 	$register->registerUser( $userData );
@@ -98,14 +99,12 @@ class UsersController extends \BaseController {
 	 	// Log the user in
 	 	$register->logUserIn( $userData );
 
-	 	return Redirect::to('dash')->with('success', 'You have successfully logged in!');
+	 	return Redirect::to('dash')->with( 'success', 'You have successfully logged in!' );
 
 	}
 
-	return $register->isValid( $userData );
-
  	// Else return with errors
-		
+	return Redirect::to('register')->with( 'errors', $isValid );
 
 	}
 
