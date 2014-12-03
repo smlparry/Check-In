@@ -30,12 +30,9 @@ class CheckinController extends \BaseController {
 			if ( $checkin->verifyAuth( $authId, $formId ) === true 
 			  && $checkin->verifyGroupId( $parentId ) === true ){
 
-				// Add the record to the database
-				$checkin->user_id = $authId;
-				$checkin->parent_id = $parentId;
-				$checkin->save();
+				$checkin->addRecord( $authId, $parentId );
 
-				return 'It worked';
+				return View::make('checkin.after', ['parentId' => $parentId ]);
 
 			}
 

@@ -8,6 +8,7 @@ Route::get('/', 'PagesController@landing');
 Route::resource("/login", "UsersController");
 Route::get("/register", "UsersController@create");
 Route::post("/register", "UsersController@register");
+Route::get('/logout', 'UsersController@destroy');
 
 // Check in Routing
 Route::get('/checkin/{uniqueId}', 'CheckinController@index');

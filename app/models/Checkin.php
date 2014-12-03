@@ -53,5 +53,16 @@ class Checkin extends Eloquent {
 
 	}
 
+	/*
+		Add the record to the database DO VALIDATION BEFORE!
+	 */
+	public function addRecord( $authId, $parentId )
+	{
+		$this->user_id = $authId;
+		$this->parent_id = $parentId;
+		$this->save();
+
+		return true;
+	}
 
 }
