@@ -1,12 +1,12 @@
-@extends("layouts.master")
+@extends('layouts.master')
 
-@section("content")
+@section('content')
 	<div class="login-wrapper">
 		<div class="login-header">
-			<h3>Login</h3>
+			<h3>Register</h3>
 		</div>
 
-		{{ Form::open( array('route' => 'login.store', 'class' => 'form-horizontal') ) }}
+		{{ Form::open( array('action' => 'UsersController@register', 'class' => 'form-horizontal') ) }}
 
 			<!-- Name -->
 			<div class="control-group {{{ $errors->has('email') ? 'error' : '' }}}">
@@ -40,7 +40,7 @@
 			<!-- Login button -->
 			<div class="control-group">
 				<div class="controls">
-					{{ Form::submit( 'Login', array('class' => 'btn btn-main btn-block') ) }}
+					{{ Form::submit( 'Register', array('class' => 'btn btn-main btn-block') ) }}
 				</div>
 			</div>
 

@@ -9,7 +9,7 @@ class UsersController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("auth.users");
+		return View::make("auth.login");
 	}
 
 
@@ -21,7 +21,7 @@ class UsersController extends \BaseController {
 	public function create()
 	{	
 		// Return the login form
-		return View::make("auth.login");
+		return View::make("auth.register");
 	}
 
 
@@ -81,6 +81,32 @@ class UsersController extends \BaseController {
 	public function destroy($id)
 	{
 		//
+	}
+
+	public function register()
+	{
+		// Register the user and log them in
+		// Pass onto class function
+		$register = new User;
+		$userData = $register->userDataToArray( Input::all() );
+
+ 	if ( $register->isValid( $userData ) === true ){
+
+	 	// Register the user
+	 	$register->registerUser( $userData );
+
+	 	// Log the user in
+	 	$register->logUserIn( $userData );
+
+	 	return Redirect::to('dash')->with('success', 'You have successfully logged in!');
+
+	}
+
+	return $register->isValid( $userData );
+
+ 	// Else return with errors
+		
+
 	}
 
 

@@ -1,9 +1,10 @@
 Design
-	- Blue (#COLORCODE)
+	- Blue (#4aa3df)
 	- Simple responsive dashboard 
 	- Font: Lato
 
 Core Functionality
+	- Log user in
 	- Check a user in
 	- Different user privilages
 	- Admin can view a list of connected users
