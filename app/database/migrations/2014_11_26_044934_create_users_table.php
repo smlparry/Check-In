@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password', 64);
 			$table->string('remember_token', 100)->nullable();
 			$table->integer('group_id');
+			$table->string('unique_id', 8);
 			$table->timestamps();
 		});
 	}

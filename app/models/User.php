@@ -83,6 +83,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		$this->email = $userData['email'];
 		$this->password = Hash::make( $userData['password'] );
 		$this->group_id = 1;
+		$this->unique_id = str_random(8);
 		$this->save();
 		
 	}

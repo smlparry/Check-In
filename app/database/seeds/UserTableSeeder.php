@@ -14,7 +14,8 @@ Class UserTableSeeder extends Seeder {
 		DB::table('users')->insert([
 		                          'email' => "samuel@zaprri.com",
 		                          'password' => Hash::make('123'),
-		                          'group_id' => 2
+		                          'group_id' => 2,
+		                          'unique_id' => str_random(8);
 					        ]); 
 
 	}

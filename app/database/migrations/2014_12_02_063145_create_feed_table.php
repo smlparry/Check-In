@@ -16,6 +16,7 @@ class CreateFeedTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id');
+			$table->integer('parent_id');
 			$table->timestamps();
 		});
 	}
