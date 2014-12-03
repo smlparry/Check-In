@@ -8,4 +8,9 @@ class PagesController extends \BaseController {
 		return View::make("pages.dashboard");
 	}
 
+	public function landing()
+	{
+		return View::make('pages.logged_out');
+	}
+
 }
