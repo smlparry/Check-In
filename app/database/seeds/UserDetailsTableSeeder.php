@@ -13,7 +13,11 @@ Class UserDetailsTableSeeder extends Seeder {
         // Add the seeded records
 		DB::table('user_details')->insert([
 		                          'user_id' => 1,
-		                          'details' => 'Here go the details'
+		                          'name' => 'Samuel Parry',
+		                          'address' => 'This address',
+		                          'postcode' => '3216',
+		                          'phone_number' => '0435061054',
+		                          'custom_details' => 'Here go the details'
 					        ]); 
 
 	}
