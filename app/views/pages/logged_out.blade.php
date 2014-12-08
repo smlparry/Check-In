@@ -13,6 +13,7 @@
 		<li>{{ link_to('users', 'Connected Users') }}</li>
 		<li>{{ link_to('register', 'Register') }}</li>
 		<li>{{ link_to('checkin/7BWgg4AK', 'Check In Page') }}</li>
+		<li>{{ link_to('checkin/history', 'Check In Feed') }}</li>
 		<li>{{ link_to('logout', 'Logout') }}</li>
 		
 		@if ( Auth::check() )

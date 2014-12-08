@@ -37,13 +37,27 @@ class CheckinController extends \BaseController {
 			}
 
 			// The id in the form did not match the one they are logged in with.
-			// This could be cause they altered the html in the form and teh hidden feild
+			// This could be cause they altered the html in the form and the hidden feild
 			return 'Something went wrong';
 
 		}
 
-		return "YOU MUST BE LOGGED IN FGT";
+		return "You must be logged in";
 	}
 
+	/*
+		Show the users check in history
+	 */
+	public function history() 
+	{
+
+		$checkin = new Checkin;
+		$history = $checkin->history( Auth::id() );
+		$parents = $checkin->historyParents( $history ); 
+		//return $parents;
+		//$data = array_merge( $history, $parents );
+		return View::make( 'checkin.history', [ 'history' => $parents ] );
+
+	}
 
 }

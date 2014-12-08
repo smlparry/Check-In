@@ -12,6 +12,15 @@ class Checkin extends Eloquent {
 	 */
 	protected $table = 'feed';
 
+	/*
+		Establish user relationship
+	 */
+	public function hasParent(){
+
+		return $this->hasOne( 'User', 'id' );
+
+	}
+
 	/* 
 		Get the parent id from the unique id
 	*/
@@ -66,4 +75,39 @@ class Checkin extends Eloquent {
 		return true;
 	}
 
+	/*
+		Get the users check in history
+	 */
+	public function history( $id )
+	{
+		return $this->where( 'user_id', $id )
+					->select( 'parent_id', 'created_at' )
+					->get();
+	}
+
+	/*
+		Get the users history parents data
+	 */
+	public function historyParents( $history )
+	{	
+
+		foreach ( $history as $historyItem ){
+
+			$historyParents = $this->find( $historyItem->parent_id )->hasParent->toArray();
+
+			$historyUser = [
+					'parent_id' => $historyItem->parent_id, 
+					'checked_in_time' => $historyItem['created_at']->toDateTimeString() 
+			];
+
+			$historyData[] = [
+					'parent_data' => $historyParents, 
+					'user_data' => $historyUser
+			];
+
+		}
+
+		return $historyData;
+
+	}
 }
