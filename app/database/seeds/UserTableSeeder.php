@@ -12,6 +12,7 @@ Class UserTableSeeder extends Seeder {
 
         // Add the seeded records
 		DB::table('users')->insert([
+		                          'id' => 1,
 		                          'email' => "samuel@zaprri.com",
 		                          'password' => Hash::make('123'),
 		                          'group_id' => 2,
@@ -19,6 +20,7 @@ Class UserTableSeeder extends Seeder {
 					        ]); 
 		// Add the seeded records
 		DB::table('users')->insert([
+		                          'id' => 2,
 		                          'email' => "samuel.parry@bigpond.com",
 		                          'password' => Hash::make('123'),
 		                          'group_id' => 1,
