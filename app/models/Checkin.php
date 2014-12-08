@@ -25,6 +25,7 @@ class Checkin extends Eloquent {
 		return false;
 
 	}
+	
 	/*
 		Simple function to verify the html in the form has not changed
 	 */
