@@ -60,8 +60,8 @@ class UsersController extends \BaseController {
 	 */
 	public function show()
 	{	
-		$users = User::all();
-		return View::make( 'auth.users', ['users' => $users] );
+		$connections = new Connection;
+		return $connections->connectionsToArray( Auth::id() );
 	}
 
 
