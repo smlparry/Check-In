@@ -8,5 +8,5 @@
 		</div>
 	@endif
 
-	<h1>This is where the dashboard goes</h1>
+	<h1><a href="/">This is where the dashboard goes</a></h1>
 @stop

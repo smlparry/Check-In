@@ -6,7 +6,7 @@ Design
 Core Functionality
 	/ Register a user  
 	/ Log user in
-	- Check a user in
+	/ Check a user in
 	- Different user privilages
 	- Admin can view a list of connected users
 	- Admin can specify what information they require from a user
