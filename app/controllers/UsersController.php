@@ -59,7 +59,7 @@ class UsersController extends \BaseController {
 	 * @return Response
 	 */
 	public function show()
-	{
+	{	
 		$users = User::all();
 		return View::make( 'auth.users', ['users' => $users] );
 	}
