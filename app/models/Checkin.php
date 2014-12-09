@@ -15,10 +15,17 @@ class Checkin extends Eloquent {
 	/*
 		Establish user relationship
 	 */
-	public function hasParent(){
-
+	public function hasParent()
+	{
 		return $this->hasOne( 'User', 'id' );
+	}
 
+	/*
+		Establish parent details relationship
+	 */
+	public function hasParentDetails()
+	{
+		return $this->hasOne( 'UserDetail', 'user_id' );
 	}
 
 	/* 
@@ -84,18 +91,23 @@ class Checkin extends Eloquent {
 	}
 
 	/*
-		Get the users history parents data
+		Get the users history parents data. I.E the details of the places they have checked in at
 	 */
 	public function historyParents( $history )
 	{	
 
 		foreach ( $history as $historyItem ){
 
-			$historyParents = $this->find( $historyItem['parent_id'] )->hasParent;
+			$historyParents = $this->find( $historyItem['parent_id'] )
+								   ->hasParent;
+
+			$historyParentDetails = $this->find( $historyItem['parent_id'] )
+			                             ->hasParentDetails;
 
 			$historyData[] = [
 					'parent_data' => $historyParents, 
-					'user_data' => $historyItem
+					'parent_details_data' => $historyParentDetails,
+					'user_checked_in_data' => $historyItem
 			];
 
 		}

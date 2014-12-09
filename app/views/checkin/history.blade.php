@@ -5,7 +5,9 @@
 	<ul>
 		@foreach ( $history as $historyItem )
 			<li>
-				{{ $historyItem['user_data']->created_at }}
+				Checked in at: {{ $historyItem['parent_details_data']->name }}
+				<br>
+				At: {{ $historyItem['user_checked_in_data']->created_at }}
 			</li>
 		@endforeach
 

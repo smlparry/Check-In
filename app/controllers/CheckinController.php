@@ -54,8 +54,6 @@ class CheckinController extends \BaseController {
 		$checkin = new Checkin;
 		$history = $checkin->history( Auth::id() );
 		$parents = $checkin->historyParents( $history ); 
-		//return $parents;
-		//$data = array_merge( $history, $parents );
 		return View::make( 'checkin.history', [ 'history' => $parents ] );
 
 	}

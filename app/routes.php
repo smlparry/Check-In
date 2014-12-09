@@ -20,3 +20,7 @@ Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@aft
  */ 
 Route::get('/users', 'UsersController@show');
 
+/*
+	Random testing!
+ */
+Route::get('/test', 'TestController@index');
