@@ -5,7 +5,7 @@
 	<ul>
 		@foreach ( $history as $historyItem )
 			<li>
-				{{ print_r($historyItem['parent_data']) }}
+				{{ $historyItem['user_data']->created_at }}
 			</li>
 		@endforeach
 

@@ -80,9 +80,7 @@ class Checkin extends Eloquent {
 	 */
 	public function history( $id )
 	{
-		return $this->where( 'user_id', $id )
-					->select( 'parent_id', 'created_at' )
-					->get();
+		return $this->where( 'user_id', $id )->get();
 	}
 
 	/*
@@ -93,16 +91,11 @@ class Checkin extends Eloquent {
 
 		foreach ( $history as $historyItem ){
 
-			$historyParents = $this->find( $historyItem->parent_id )->hasParent->toArray();
-
-			$historyUser = [
-					'parent_id' => $historyItem->parent_id, 
-					'checked_in_time' => $historyItem['created_at']->toDateTimeString() 
-			];
+			$historyParents = $this->find( $historyItem['parent_id'] )->hasParent;
 
 			$historyData[] = [
 					'parent_data' => $historyParents, 
-					'user_data' => $historyUser
+					'user_data' => $historyItem
 			];
 
 		}
