@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+
 	<h1>User Check In History</h1>
 	<ul>
 		@if ( ! empty($history) )
