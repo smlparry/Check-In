@@ -6,12 +6,7 @@
 		@if ( ! empty($history) )
 			@foreach ( $history as $historyItem )
 				<li>
-
 					{{ 'Checked in at: ' . $historyItem['parent_details_data']->name . ' at: ' . $historyItem['user_checked_in_data']->created_at  }}
-					<br>
-			<!-- 	 'User that checked in: ' . $historyItem['user_checked_in_data']->password }} -->
-
-
 				</li>
 			@endforeach
 		@else

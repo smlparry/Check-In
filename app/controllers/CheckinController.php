@@ -32,7 +32,7 @@ class CheckinController extends \BaseController {
 
 				$checkin->addRecord( $authId, $parentId );
 
-				return View::make('checkin.after', ['parentId' => $parentId ]);
+				return Redirect::to('checkin/history')->with( 'parent_id', $parentId );
 
 			}
 

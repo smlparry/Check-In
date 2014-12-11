@@ -103,7 +103,6 @@ class Checkin extends Eloquent {
 				$historyParentDetails = $this->getParentDetails( $historyItem['parent_id'] );
 
 				$historyData[] = [
-
 						'parent_details_data' => $historyParentDetails['0'],
 						'user_checked_in_data' => $historyItem
 					];
@@ -115,6 +114,6 @@ class Checkin extends Eloquent {
 		}
 
 		return false;
-		
+
 	}
 }
