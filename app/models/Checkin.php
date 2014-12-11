@@ -15,17 +15,17 @@ class Checkin extends Eloquent {
 	/*
 		Establish user relationship
 	 */
-	public function hasParent()
+	public function getParent( $parentId )
 	{
-		return $this->hasOne( 'User', 'id' );
+		return DB::table('users')->where( 'id', $parentId )->get();
 	}
 
 	/*
 		Establish parent details relationship
 	 */
-	public function hasParentDetails()
+	public function getParentDetails( $parentId )
 	{
-		return $this->hasOne( 'UserDetail', 'user_id' );
+		return DB::table('user_details')->where( 'user_id', $parentId )->get();
 	}
 
 	/* 
@@ -96,23 +96,25 @@ class Checkin extends Eloquent {
 	public function historyParents( $history )
 	{	
 
-		foreach ( $history as $historyItem ){
+		if ( count( $history ) != 0 ){
 
-			$historyParents = $this->find( $historyItem['parent_id'] )
-								   ->hasParent;
+			foreach ( $history as $historyItem ){
 
-			$historyParentDetails = $this->find( $historyItem['parent_id'] )
-			                             ->hasParentDetails;
+				$historyParentDetails = $this->getParentDetails( $historyItem['parent_id'] );
 
-			$historyData[] = [
-					'parent_data' => $historyParents, 
-					'parent_details_data' => $historyParentDetails,
-					'user_checked_in_data' => $historyItem
-			];
+				$historyData[] = [
+
+						'parent_details_data' => $historyParentDetails['0'],
+						'user_checked_in_data' => $historyItem
+					];
+
+			}
+
+			return $historyData;
 
 		}
 
-		return $historyData;
-
+		return false;
+		
 	}
 }
