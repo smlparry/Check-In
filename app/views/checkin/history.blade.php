@@ -6,8 +6,12 @@
 	<ul>
 		@if ( ! empty( $history ) )
 			@foreach ( $history as $historyItem )
-				<li>
-					{{ 'Checked in at: ' . $historyItem['parent_details_data']->name . ' at: ' . $historyItem['user_checked_in_data']->created_at  }}
+				<li>	
+					@foreach( $historyItem['parent_details_data'] as $parentDetails )
+						{{ 'Checked in at: ' . $parentDetails->name }}
+						<br>
+						{{ 'At: ' . $historyItem['user_checked_in_data']->created_at  }}
+					@endforeach
 				</li>
 			@endforeach
 		@else

@@ -67,10 +67,10 @@ class Checkin extends Eloquent {
 	/*
 		To verify they are indeed an admin
 	 */
-	public function verifyGroupId()
+	public function verifyGroupId( $id )
 	{
 
-		if ( Auth::user()->group_id === 2 ){
+		if ( User::find( $id )->group_id === 2 ){
 			return true;
 		}
 
@@ -111,7 +111,7 @@ class Checkin extends Eloquent {
 				$historyParentDetails = $this->getParentDetails( $historyItem['parent_id'] );
 
 				$historyData[] = [
-						'parent_details_data' => $historyParentDetails['0'],
+						'parent_details_data' => $historyParentDetails,
 						'user_checked_in_data' => $historyItem
 					];
 

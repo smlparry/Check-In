@@ -28,7 +28,7 @@ class CheckinController extends \BaseController {
 
 			// Validation
 			if ( $checkin->verifyAuth( $authId, $formId ) === true 
-			  && $checkin->verifyGroupId( $parentId ) === true ){
+			 && $checkin->verifyGroupId( $parentId ) === true ){
 
 				$checkin->addRecord( $authId, $parentId );
 
@@ -62,7 +62,7 @@ class CheckinController extends \BaseController {
 	{
 		$checkinFeed = new Checkin;
 
-		if ( $checkinFeed->verifyGroupId() === true ){
+		if ( $checkinFeed->verifyGroupId( Auth::id() ) === true ){
 			$feed = $checkinFeed->feed( Auth::id() );
 			$users = $checkinFeed->feedUsers( $feed ); 
 			return View::make( 'checkin.feed', [ 'feed' => $users ] );
