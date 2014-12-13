@@ -106,7 +106,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function logUserIn( $userData )
 	{
 
-		if ( Auth::attempt( $userData ) ){
+		if ( Auth::attempt( $userData , true ) ){
 			return true;
 		}
 
