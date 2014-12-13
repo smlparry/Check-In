@@ -10,10 +10,12 @@ Core Functionality
 	/ Admin can view a list of connected users
 	/ When a user registers make a row in the user_details table
 	/ Different user privilages
-	- Admin can specify what information they require from a user
 	/ Admin can see a feed of checked in users
 	/ User can view a feed of when and where they connected last
+	- Admin can specify what information they require from a user
+	- Allow a user to connect to a place
 	- Be able to update the user details table.
+	- Front end
 	- Admin dashboard
 		- Graph of total users checking in
 		- Most checked in user

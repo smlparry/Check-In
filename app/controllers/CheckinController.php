@@ -68,7 +68,7 @@ class CheckinController extends \BaseController {
 			return View::make( 'checkin.feed', [ 'feed' => $users ] );
 		}
 
-		return 'You need to be an admin to perform this action';
+		return View::make( 'checkin.feed', ['feed' => false] );
 
 	}
 

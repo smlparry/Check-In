@@ -15,8 +15,10 @@
 					@endforeach 
 				</li>
 			@endforeach
+		@elseif ( $feed === false )
+			<li>You need to be an admin to perform this action</li>
 		@else
-			<li>User has not checked in yet.</li>
+			<li>No one has checked in yet.</li>
 		@endif
 	</ul>
 @stop
