@@ -19,8 +19,10 @@
 
 			</li>
 			@endforeach 
-		@else 
-			<li> You have no connected users </li>
+		@elseif ( $connectedUsers === false )
+			<li> You need to be a registered place to have connected users </li>
+		@else
+			<li>You have no connected users</li>
 		@endif
 	</ul>
 

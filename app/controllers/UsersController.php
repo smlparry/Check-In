@@ -94,6 +94,7 @@ class UsersController extends \BaseController {
 		// Register the user and log them in
 		// Pass onto class function
 		$register = new User;
+		$userDetails = new UserDetail;
 		$userData = $register->userDataToArray( Input::all() );
 		$rules = $register->rulesRegister();
 		$isValid = $register->isValid( $userData, $rules );
@@ -105,6 +106,9 @@ class UsersController extends \BaseController {
 
 		 	// Log the user in
 		 	$register->logUserIn( $userData );
+
+		 	// Add user details row to the database
+		 	$userDetails->addUser( Auth::id() );
 
 		 	return Redirect::to('dash')->with( 'success', 'You have successfully logged in!' );
 

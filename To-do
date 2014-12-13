@@ -8,9 +8,10 @@ Core Functionality
 	/ Log user in
 	/ Check a user in
 	/ Admin can view a list of connected users
+	- When a user registers make a row in the user_details table
 	- Different user privilages
 	- Admin can specify what information they require from a user
-	- Admin can see a feed of checked in users
+	/ Admin can see a feed of checked in users
 	/ User can view a feed of when and where they connected last
 	- Initial sign up with just email and password, more information can be added as is required by the admin of the business they are trying to connect with
 	- Admin dashboard

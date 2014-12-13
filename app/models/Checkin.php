@@ -145,7 +145,7 @@ class Checkin extends Eloquent {
 
 				$feedDetails[] = [
 						'user' => User::find( $feedItem->user_id ),
-						'user_details' => $this->getUserDetails( $feedItem->user_id)
+						'user_details' => $this->getUserDetails( $feedItem->user_id )
 					];
 
 			}	

@@ -19,6 +19,13 @@ class UserDetail extends Eloquent {
 	{
 		return $this->all();
 	}
+
+	public function addUser( $id )
+	{
+		$this->user_id = $id;
+		$this->name = 'Not specified';
+		$this->save();
+	}
 	
 
 }
