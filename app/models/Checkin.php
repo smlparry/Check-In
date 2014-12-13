@@ -21,6 +21,14 @@ class Checkin extends Eloquent {
 	}
 
 	/*
+		Establish user relationship
+	 */
+	public function getUserDetails( $userId )
+	{
+		return DB::table('user_details')->where( 'user_id', $userId )->get();
+	}
+
+	/*
 		Establish parent details relationship
 	 */
 	public function getParentDetails( $parentId )
@@ -59,10 +67,10 @@ class Checkin extends Eloquent {
 	/*
 		To verify they are indeed an admin
 	 */
-	public function verifyGroupId( $id )
+	public function verifyGroupId()
 	{
 
-		if ( User::find( $id )->group_id === 2 ){
+		if ( Auth::user()->group_id === 2 ){
 			return true;
 		}
 
@@ -115,5 +123,37 @@ class Checkin extends Eloquent {
 
 		return false;
 
+	}
+
+	/*
+		Get the admins check in history of users
+	 */
+	public function feed( $id )
+	{
+		return $this->where( 'parent_id', $id )->get();
+	}
+
+	/*
+		Get the details for the users who haev connected
+	 */
+	public function feedUsers( $feed )
+	{	
+
+		if ( count($feed) !== 0 ){
+
+			foreach( $feed as $feedItem ){
+
+				$feedDetails[] = [
+						'user' => User::find( $feedItem->user_id ),
+						'user_details' => $this->getUserDetails( $feedItem->user_id)
+					];
+
+			}	
+
+			return $feedDetails;
+
+		}
+
+		return false;
 	}
 }

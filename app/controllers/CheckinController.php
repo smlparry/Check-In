@@ -58,4 +58,18 @@ class CheckinController extends \BaseController {
 
 	}
 
+	public function feed()
+	{
+		$checkinFeed = new Checkin;
+
+		if ( $checkinFeed->verifyGroupId() === true ){
+			$feed = $checkinFeed->feed( Auth::id() );
+			$users = $checkinFeed->feedUsers( $feed ); 
+			return View::make( 'checkin.feed', [ 'feed' => $users ] );
+		}
+
+		return 'You need to be an admin to perform this action';
+
+	}
+
 }

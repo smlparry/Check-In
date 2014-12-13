@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<h1>User Check In History</h1>
+	<h1>Check in history for logged in user</h1>
 	<ul>
 		@if ( ! empty( $history ) )
 			@foreach ( $history as $historyItem )
@@ -11,7 +11,7 @@
 				</li>
 			@endforeach
 		@else
-			<li>User has not checked in yet.</li>
+			<li>You have not checked in yet.</li>
 		@endif
 	</ul>
 @stop
