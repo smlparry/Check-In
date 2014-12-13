@@ -10,7 +10,7 @@ Core Functionality
 	- Admin can view a list of connected users
 	- Different user privilages
 	- Admin can specify what information they require from a user
-	- Admin can see a feed of checked in users
+	/ Admin can see a feed of checked in users
 	- User can view a feed of when and where they connected last
 	- Initial sign up with just email and password, more information can be added as is required by the admin of the business they are trying to connect with
 	- Admin dashboard
