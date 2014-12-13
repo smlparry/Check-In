@@ -113,4 +113,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->errorMessages;
 	}
 
+	/* 
+		Get the users details
+	*/
+	public function userDetails( $id )
+	{
+		return DB::table('user_details')->where( 'user_id', $id )->get();
+	}
 }

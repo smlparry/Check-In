@@ -52,19 +52,6 @@ class UsersController extends \BaseController {
 
 	}
 
-
-	/**
-	 * Show all the users
-	 *
-	 * @return Response
-	 */
-	public function show()
-	{	
-		$connections = new Connection;
-		return $connections->connectionsToArray( Auth::id() );
-	}
-
-
 	/**
 	 * Show the form for editing the specified resource.
 	 *

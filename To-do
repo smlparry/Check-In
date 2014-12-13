@@ -7,7 +7,7 @@ Core Functionality
 	/ Register a user  
 	/ Log user in
 	/ Check a user in
-	- Admin can view a list of connected users
+	/ Admin can view a list of connected users
 	- Different user privilages
 	- Admin can specify what information they require from a user
 	/ Admin can see a feed of checked in users

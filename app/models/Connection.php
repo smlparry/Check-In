@@ -1,6 +1,5 @@
 <?php
 
-
 class Connection extends Eloquent {
 
 	protected $fillable = array('user_id', 'connections');
@@ -22,10 +21,42 @@ class Connection extends Eloquent {
 	{	
 		
 		$connectionsString = $this->connections( $id );
-		return explode( ',' , $connectionsString );
+		
+		if ( ! empty( $connectionsString ) ){
+			return explode( ',' , $connectionsString );
+		}
 
+		return false;
+		
 	}
 
+	/*
+		Get information for the connected users
+	 */
+	public function connectionUserDetails( $connections )
+	{
+
+		if ( $connections !== false ){
+
+			$user = new User;
+				
+			foreach ( $connections as $connectedUser ){
+
+				$users = $user->find( $connectedUser );
+				$userDetails = $user->userDetails( $connectedUser );
+
+				$connectedUserDetails[] = [
+							'user' => $users,
+							'user_details' => $userDetails
+						];
+			}
+
+			return $connectedUserDetails;
+		}
+
+		return false;
+
+	}
 	/* 
 		Add a new connection
 	*/

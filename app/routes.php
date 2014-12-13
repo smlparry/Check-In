@@ -15,10 +15,8 @@ Route::get('/checkin/history', 'CheckInController@history');
 Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 
-/*
-	Delete this one 
- */ 
-Route::get('/users', 'UsersController@show');
+// Admin operations
+Route::get('/users', 'AdminController@connectedUsers');
 
 /*
 	Random testing!
