@@ -16,7 +16,7 @@ class AdminController extends \BaseController {
 				return View::make('checkin.connectedUsers')->with( 'connectedUsers', $connectedUserDetails );
 			}
 
-			return View::make('checkin.connectedUsers');
+			return View::make('checkin.connectedUsers')->with('connectedUsers', null );
 		} 
 
 		return View::make('checkin.connectedUsers')->with( 'connectedUsers', false );
