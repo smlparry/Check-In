@@ -17,7 +17,8 @@ class RequiredDetailsTableSeeder extends Seeder {
 		                          'address' => true,
 		                          'postcode' => true,
 		                          'phone_number' => true,
-		                          'custom_details' => false
+		                          'custom_details' => false,
+		                          'custom_details_data' => null
 					        ]); 
 
 	}

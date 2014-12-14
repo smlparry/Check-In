@@ -34,10 +34,19 @@ class AdminController extends \BaseController {
 	/* 
 		Allow the admin to specify what information they require
 	*/
-	public function requiredDetails()
+	public function getRequiredDetails()
 	{
 		$connection = new Connection;
-		$requiredDetails = $connection->getRequiredDetails();
-		return View::make('admin.requiredDetails');
+		$requiredDetails = $connection->getRequiredDetails( Auth::id() );
+		return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
+	}
+
+	/*
+		Update the required details table
+	
+	*/
+	public function storeRequiredDetails()
+	{
+		
 	}
 }

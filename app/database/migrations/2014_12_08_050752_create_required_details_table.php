@@ -21,6 +21,7 @@ class CreateRequiredDetailsTable extends Migration {
 			$table->boolean('postcode');
 			$table->boolean('phone_number');
 			$table->boolean('custom_details');
+			$table->string('custom_details_data')->nullable();
 			$table->timestamps();
 		});
 	}

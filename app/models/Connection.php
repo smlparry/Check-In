@@ -60,10 +60,9 @@ class Connection extends Eloquent {
 	/*
 		Get the details the admin has specified they require
 	 */ 
-	public function getRequiredDetails()
+	public function getRequiredDetails( $id )
 	{
-		$id = Auth::id();
-		
+		return DB::table('required_details')->where('user_id', $id)->get();
 	}
 	/* 
 		Add a new connection
