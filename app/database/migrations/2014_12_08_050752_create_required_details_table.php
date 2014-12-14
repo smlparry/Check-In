@@ -17,15 +17,10 @@ class CreateRequiredDetailsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id');
 			$table->boolean('name');
-			$table->string('name_prompt', 64)->nullable();
 			$table->boolean('address');
-			$table->string('address_prompt', 64)->nullable();
 			$table->boolean('postcode');
-			$table->string('postcode_prompt', 64)->nullable();
 			$table->boolean('phone_number');
-			$table->string('phone_number_prompt', 64)->nullable();
 			$table->boolean('custom_details');
-			$table->string('custom_details_data')->nullable();
 			$table->timestamps();
 		});
 	}

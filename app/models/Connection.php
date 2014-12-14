@@ -57,6 +57,14 @@ class Connection extends Eloquent {
 		return false;
 
 	}
+	/*
+		Get the details the admin has specified they require
+	 */ 
+	public function getRequiredDetails()
+	{
+		$id = Auth::id();
+		
+	}
 	/* 
 		Add a new connection
 	*/

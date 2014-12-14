@@ -36,6 +36,8 @@ class AdminController extends \BaseController {
 	*/
 	public function requiredDetails()
 	{
+		$connection = new Connection;
+		$requiredDetails = $connection->getRequiredDetails();
 		return View::make('admin.requiredDetails');
 	}
 }

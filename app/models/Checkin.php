@@ -154,6 +154,6 @@ class Checkin extends Eloquent {
 
 		}
 
-		return false;
+		return [];
 	}
 }

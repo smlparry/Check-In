@@ -4,6 +4,7 @@
 
 	<h1>Admin feed of checked in users</h1>
 	<ul>
+
 		@if ( ! empty( $feed ) )
 			@foreach ( $feed as $feedItem )
 				<li>
