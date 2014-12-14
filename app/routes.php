@@ -1,7 +1,6 @@
 <?php
 
 // Main Pages
-Route::get("/dash", "PagesController@dashboard");
 Route::get('/', 'PagesController@landing');
 
 // Auth Routing
@@ -17,7 +16,9 @@ Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 
 // Admin operations
+Route::get("/dash", "AdminController@dashboard");
 Route::get('/users', 'AdminController@connectedUsers');
+Route::get('/users/required-details', 'AdminController@requiredDetails');
 
 /*
 	Random testing!

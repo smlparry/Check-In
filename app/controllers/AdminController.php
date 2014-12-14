@@ -3,6 +3,14 @@
 class AdminController extends \BaseController {
 
 	/*
+		Return the dashboard
+	 */
+	public function dashboard()
+	{
+		// Return the dashboard with all the variables need
+		return View::make("admin.dashboard");
+	}
+	/*
 		Get a list of the connected users 
 	 */
 	public function connectedUsers()
@@ -23,4 +31,11 @@ class AdminController extends \BaseController {
 
 	}
 
+	/* 
+		Allow the admin to specify what information they require
+	*/
+	public function requiredDetails()
+	{
+		return View::make('admin.requiredDetails');
+	}
 }

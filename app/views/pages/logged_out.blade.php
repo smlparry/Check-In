@@ -9,6 +9,7 @@
 		<li>{{ link_to('checkin/7BWgg4AK', 'Check In Page') }}</li>
 		<li>{{ link_to('checkin/history', 'Check In History') }}</li>
 		<li>{{ link_to('checkin/feed', 'Check in Feed') }}</li>
+		<li>{{ link_to('users/required-details', 'Required Details') }}</li>
 		<li>{{ link_to('logout', 'Logout') }}</li>
 		
 		@if ( Auth::check() )
