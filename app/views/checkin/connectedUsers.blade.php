@@ -4,7 +4,7 @@
 	
 	<h1>Connected Users:</h1>
 	<ul>
-
+		
 		@if ( ! empty( $connectedUsers ) )
 
 			@foreach( $connectedUsers as $connectedUser )
