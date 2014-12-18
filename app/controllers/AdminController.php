@@ -17,7 +17,8 @@ class AdminController extends \BaseController {
 	{	
 		if ( Auth::user()->group_id === 2){
 			$connections = new Connection;
-			$connectedUsers = $connections->connectionsToArray( Auth::id() );
+			$connectedUsers = $connections->connections( Auth::id() );
+			$connectedUsers = $connections->explodeStringToArray( $connectedUsers );
 			$connectedUserDetails = $connections->connectionUserDetails( $connectedUsers );
 
 			if ( ! empty($connectedUserDetails) ){
@@ -36,9 +37,15 @@ class AdminController extends \BaseController {
 	*/
 	public function getRequiredDetails()
 	{
-		$connection = new Connection;
-		$requiredDetails = $connection->getRequiredDetails( Auth::id() );
-		return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
+		if ( Auth::user()->group_id === 2 ){
+			$connection = new Connection;
+			$requiredDetails = $connection->getRequiredDetails( Auth::id() );
+			$requiredDetails = $connection->unArray( $requiredDetails ); 
+			$requiredDetails = $connection->customDetailsToArray( $requiredDetails );
+			return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
+		}
+
+		return View::make('admin.requiredDetails')->with( 'requiredDetails', false );
 	}
 
 	/*
