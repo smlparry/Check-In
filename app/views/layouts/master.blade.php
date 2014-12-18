@@ -30,9 +30,10 @@
 
     
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="/js/jquery-1.11.1.min.js"><\/script>')</script>
+        {{ HTML::script('js/bootstrap.min.js')}}
         {{ HTML::script('js/main.js') }}
-
+        @yield('js')
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

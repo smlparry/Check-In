@@ -41,7 +41,7 @@ class AdminController extends \BaseController {
 			$connection = new Connection;
 			$requiredDetails = $connection->getRequiredDetails( Auth::id() );
 			$requiredDetails = $connection->unArray( $requiredDetails ); 
-			$requiredDetails = $connection->customDetailsToArray( $requiredDetails );
+			$requiredDetails = $connection->requiredDetailsToArray( $requiredDetails );
 			return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
 		}
 
@@ -50,10 +50,17 @@ class AdminController extends \BaseController {
 
 	/*
 		Update the required details table
-	
 	*/
 	public function storeRequiredDetails()
 	{
-		
+		$input = Input::all();
+		$store = new Connection;
+		$parseRequired = $store->parseRequiredDetails( $input );
+		$storeRequired = $store->storeRequiredDetails( $parseRequired , Auth::id() );
+		if ( $storeRequired !== false ){
+			return View::make('admin.requiredDetailsResponse')->with('response', true );
+		}
+
+		return View::make('admin.requiredDetailsResponse')->with( 'response', false );
 	}
 }

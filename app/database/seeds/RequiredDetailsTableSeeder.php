@@ -13,12 +13,7 @@ class RequiredDetailsTableSeeder extends Seeder {
         // Add the seeded records
 		DB::table('required_details')->insert([
 		                          'user_id' => 1,
-		                          'name' => true,
-		                          'address' => true,
-		                          'postcode' => true,
-		                          'phone_number' => true,
-		                          'custom_details' => false,
-		                          'custom_details_data' => null
+		                          'required_details' => 'name, address, postcode, phone_number, insurance, book, colour,'
 					        ]); 
 
 	}
