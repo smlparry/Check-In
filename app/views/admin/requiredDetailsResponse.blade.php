@@ -8,5 +8,6 @@
 		{{ link_to('users/required-details', 'Return') }}
 	@else
 		<p>Something went wrong when trying to update your required details, Please try again</p>
+		{{ link_to('users/required-details', 'Return') }}
 	@endif
 @stop
