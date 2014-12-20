@@ -12,6 +12,7 @@ Route::get('/logout', 'UsersController@destroy');
 // Check in Routing
 Route::get('/checkin/history', 'CheckInController@history');
 Route::get('/checkin/feed', 'CheckinController@feed');
+Route::get('/checkin/connect', 'CheckinController@connect');
 Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 

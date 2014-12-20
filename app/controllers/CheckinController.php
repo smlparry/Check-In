@@ -72,4 +72,14 @@ class CheckinController extends \BaseController {
 
 	}
 
+	/*
+		Connect a user to a place
+	 */
+	public function connect()
+	{
+		$connections = new Connection;
+		$connections = $connections->availableConnections();
+		return View::make('checkin.connect')->with('availableConnections', $connections);
+	}
+
 }

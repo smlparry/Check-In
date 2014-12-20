@@ -121,6 +121,15 @@ class Connection extends Eloquent {
 		}
 		return false;
 	}
+	/*
+		Display a listing of all the available connections
+	 */
+	public function availableConnections() 
+	{
+		$adminUsers = new User;
+		$adminUsers = $adminUsers->where('group_id', 2)->get();
+		return $adminUsers;
+	}
 	/* 
 		Add a new connection
 	*/
