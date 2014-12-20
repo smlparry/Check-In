@@ -127,15 +127,43 @@ class Connection extends Eloquent {
 	public function availableConnections() 
 	{
 		$adminUsers = new User;
-		$adminUsers = $adminUsers->where('group_id', 2)->get();
+		$adminUsers = $adminUsers->where( 'group_id', 2 )->get();
 		return $adminUsers;
+	}
+	/*
+		Concatinate the connections string with the new conenction, prevent duplicates as well
+	 */
+	public function concatinateConnections( $existingConnections, $newConnection )
+	{
+		if ( empty($existingConnections) ){
+			return $newConnection;
+		}
+
+		$connectionsArray = $this->explodeStringToArray( $existingConnections );
+
+		foreach ( $connectionsArray as $connection ){
+			if ( $connection == $newConnection){
+				return $existingConnections;
+			}
+		}
+
+		if ( ! empty($newConnection) ){
+			$concatinatedString = $existingConnections . ',' . $newConnection;
+			return $concatinatedString;
+		}
+
+		return $existingConnections;
 	}
 	/* 
 		Add a new connection
 	*/
-	public function addConnection()
+	public function addConnection( $user_id, $admin_id )
 	{
-		
+		if ( $user_id !== $admin_id ){
+			$currentConnections = $this->where( 'user_id', $user_id )->pluck('connections');
+			$concatinatedConnections = $this->concatinateConnections( $currentConnections, $admin_id );
+			return $this->where( 'user_id', $user_id )->update( ['connections' => $concatinatedConnections] );
+		}
 	}
 
 }

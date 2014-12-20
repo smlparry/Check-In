@@ -13,6 +13,7 @@ Route::get('/logout', 'UsersController@destroy');
 Route::get('/checkin/history', 'CheckInController@history');
 Route::get('/checkin/feed', 'CheckinController@feed');
 Route::get('/checkin/connect', 'CheckinController@connect');
+Route::post('/checkin/connect', ['as' => 'addConnection', 'uses' => 'CheckinController@addConnection'] );
 Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 

@@ -82,4 +82,19 @@ class CheckinController extends \BaseController {
 		return View::make('checkin.connect')->with('availableConnections', $connections);
 	}
 
+	/*
+		Add a user connection
+	 */ 
+	public function addConnection()
+	{
+		$input = Input::all();
+		if ( ! empty($input) ){
+			$connections = new Connection;
+			$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
+
+		}
+
+		return Redirect::to('/checkin/connect');
+	}
+
 }
