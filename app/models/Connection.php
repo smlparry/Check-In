@@ -136,6 +136,7 @@ class Connection extends Eloquent {
 	public function concatinateConnections( $existingConnections, $newConnection )
 	{
 		if ( empty($existingConnections) ){
+			$this->makeConnectionRow();
 			return $newConnection;
 		}
 
@@ -154,16 +155,32 @@ class Connection extends Eloquent {
 
 		return $existingConnections;
 	}
+	/*
+		Make new connection row
+	 */
+	public function makeConnectionRow()
+	{
+		$this->user_id = Auth::id();
+		$this->save();
+		return true;
+	}
 	/* 
 		Add a new connection
 	*/
 	public function addConnection( $user_id, $admin_id )
 	{
+		settype($admin_id, 'integer');
+
 		if ( $user_id !== $admin_id ){
-			$currentConnections = $this->where( 'user_id', $user_id )->pluck('connections');
+			$currentConnections = $this->where( 'user_id', $user_id )->pluck( 'connections' );
+
 			$concatinatedConnections = $this->concatinateConnections( $currentConnections, $admin_id );
-			return $this->where( 'user_id', $user_id )->update( ['connections' => $concatinatedConnections] );
+
+			$this->where( 'user_id', $user_id )->update( ['connections' => $concatinatedConnections] );
+
+			return true;
 		}
+		return false;
 	}
 
 }

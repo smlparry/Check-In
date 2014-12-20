@@ -91,7 +91,7 @@ class CheckinController extends \BaseController {
 		if ( ! empty($input) ){
 			$connections = new Connection;
 			$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-
+			return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
 		}
 
 		return Redirect::to('/checkin/connect');
