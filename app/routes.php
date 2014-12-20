@@ -16,10 +16,12 @@ Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
 
 // Admin operations
-Route::get("/dash", "AdminController@dashboard");
-Route::get('/users', 'AdminController@connectedUsers');
-Route::get('/users/required-details', 'AdminController@getRequiredDetails');
-Route::post('/users/required-details', ['as' => 'storeRequiredDetails', 'uses' => 'AdminController@storeRequiredDetails']);
+if ( Auth::check() ){
+	Route::get("/dash", "AdminController@dashboard");
+	Route::get('/users', 'AdminController@connectedUsers');
+	Route::get('/users/required-details', 'AdminController@getRequiredDetails');
+	Route::post('/users/required-details', ['as' => 'storeRequiredDetails', 'uses' => 'AdminController@storeRequiredDetails']);
+}
 
 /*
 	Random testing!
