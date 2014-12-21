@@ -23,7 +23,7 @@ Route::group(['before' => 'auth'], function(){
 	Route::get('/checkin/connect', 'CheckinController@connect');
 	Route::post('/checkin/connect', ['as' => 'addConnection', 'uses' => 'CheckinController@addConnection'] );
 	Route::get('/checkin/{uniqueId}', 'CheckinController@index');
-	Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@after'] );
+	Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
 });
 
 // Admin operations

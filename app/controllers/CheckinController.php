@@ -17,7 +17,7 @@ class CheckinController extends \BaseController {
 		Series of validation then add the record to teh feed database table
 		Check the user in
 	 */
-	public function after() 
+	public function checkUserIn() 
 	{
 		// First check if the user is logged in
 		$checkin = new Checkin;
@@ -30,9 +30,14 @@ class CheckinController extends \BaseController {
 			 && $checkin->verifyGroupId( $adminId ) === true
 			 && $checkin->hasConnection( $userId, $adminId ) === true ){
 
-			$checkin->addRecord( $userId, $adminId );
 
-			return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
+			if ( $checkin->compareRequiredDetails( $usersDetails, $requiredDetails ) === true ){
+
+				$checkin->addRecord( $userId, $adminId );
+				return Redirect::to('checkin.history')->with( 'success', 'Successfully checked in' );
+
+			}
+
 
 		}
 
@@ -85,8 +90,16 @@ class CheckinController extends \BaseController {
 	{
 		$input = Input::all();
 		$connections = new Connection;
-		$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-		return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+
+		// Check if the user meets all the required details, if not return with the details they need to add
+		$usersDetails = $connections->getUserDetails( $userId );
+		$requiredDetails = $connections->getRequiredDetails( $adminId );
+		
+
+		if ($connections->compareRequiredDetails( $usersDetails, $requiredDetails ) === true){
+			$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
+			return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+		}
 
 		return Redirect::to('/checkin/connect');
 	}

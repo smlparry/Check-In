@@ -92,6 +92,21 @@ class Checkin extends Eloquent {
 
 		return false;
 	}
+	/*
+		Get the admins required details.
+	 */
+	public function getRequiredDetails( $adminId )
+	{
+		return DB::table('required_details')->where( 'user_id' , $adminId )->pluck('required_details');
+	}
+	/*
+		Compare the users required details with what the admin requests
+	 */
+	public function compareRequiredDetails( $usersDetails, $requiredDetails )
+	{
+		$hello = "This is where i need to compare the required details with teh details the user has supplied, if they do not match they need to offer the option to add those details on the fly.";
+		dd($hello);
+	}
 
 	/*
 		Add the record to the database DO VALIDATION BEFORE!

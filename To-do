@@ -16,6 +16,7 @@ Core Functionality
 	- Allow a user to connect to a place
 		/ Dont allow the user to view the account if they have already connected to that account
 		- Make sure the user meets all the required details before they are able to connected.
+			- Did all the logic in the check in function. Need to move it to the add connection function. Just copied and pasted what i had into the other function. Start in checkin controller addConnection();
 	- Be able to update the user details table.
 	- Front end
 	- Admin dashboard
