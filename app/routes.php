@@ -5,14 +5,15 @@ Route::get('/', 'PagesController@landing');
 Route::get('/access-denied', 'PagesController@accessDenied');
 
 // Auth Routing
-Route::resource("/login", "UsersController");
-
 Route::group(['before' => 'guest'], function(){
+	Route::resource("/login", "UsersController");
 	Route::get("/register", "UsersController@create");
 	Route::post("/register", "UsersController@register");
 });
 
-Route::get('/logout', ['before' => 'auth', 'uses' => 'UsersController@destroy'] );
+Route::group(['before' => 'auth'], function(){
+	Route::get('/logout', ['before' => 'auth', 'uses' => 'UsersController@destroy'] );
+});
 
 
 // Check in Routing

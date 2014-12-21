@@ -20,33 +20,25 @@ class CheckinController extends \BaseController {
 	public function after() 
 	{
 		// First check if the user is logged in
-		if ( Auth::check() ){
+		$checkin = new Checkin;
+		$formId	= Input::get('id');
+		$adminId = Input::get('parent_id');
+		$userId = Auth::id();
 
-			$checkin = new Checkin;
-			$formId	= Input::get('id');
-			$adminId = Input::get('parent_id');
-			$userId = Auth::id();
-
-			// Validation
-			if ( $checkin->verifyAuth( $userId, $formId ) === true 
+		// Validation
+		if ( $checkin->verifyAuth( $userId, $formId ) === true 
 			 && $checkin->verifyGroupId( $adminId ) === true
 			 && $checkin->hasConnection( $userId, $adminId ) === true ){
 
-				$checkin->addRecord( $userId, $adminId );
+			$checkin->addRecord( $userId, $adminId );
 
-				return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
-
-			}
-
-			// The id in the form did not match the one they are logged in with.
-			// This could be cause they altered the html in the form and the hidden feild
-			dd($userId . ' ' . $adminId);
-			dd($checkin->hasConnection( $userId, $adminId ));
-			return 'Something went wrong';
+			return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
 
 		}
 
-		return "You must be logged in";
+		// The id in the form did not match the one they are logged in with.
+		// This could be cause they altered the html in the form and the hidden feild
+		return 'Something went wrong';
 	}
 
 	/*
@@ -77,7 +69,7 @@ class CheckinController extends \BaseController {
 	}
 
 	/*
-		Connect a user to a place
+		display a listing of all the places the user can connect to
 	 */
 	public function connect()
 	{
@@ -92,11 +84,9 @@ class CheckinController extends \BaseController {
 	public function addConnection()
 	{
 		$input = Input::all();
-		if ( ! empty($input) ){
-			$connections = new Connection;
-			$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-			return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
-		}
+		$connections = new Connection;
+		$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
+		return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
 
 		return Redirect::to('/checkin/connect');
 	}

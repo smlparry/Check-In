@@ -42,12 +42,8 @@ class Checkin extends Eloquent {
 	public function getParentId( $uniqueId )
 	{
 
-		if ( Auth::check() ){
-			return DB::table('users')->where( 'unique_id', $uniqueId )->pluck('id');
-		}
-
-		return false;
-
+		return DB::table('users')->where( 'unique_id', $uniqueId )->pluck('id');
+		
 	}
 	
 	/*
