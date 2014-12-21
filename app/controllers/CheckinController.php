@@ -15,6 +15,7 @@ class CheckinController extends \BaseController {
 
 	/*
 		Series of validation then add the record to teh feed database table
+		Check the user in
 	 */
 	public function after() 
 	{
@@ -23,14 +24,15 @@ class CheckinController extends \BaseController {
 
 			$checkin = new Checkin;
 			$formId	= Input::get('id');
-			$parentId = Input::get('parent_id');
-			$authId = Auth::id();
+			$adminId = Input::get('parent_id');
+			$userId = Auth::id();
 
 			// Validation
-			if ( $checkin->verifyAuth( $authId, $formId ) === true 
-			 && $checkin->verifyGroupId( $parentId ) === true ){
+			if ( $checkin->verifyAuth( $userId, $formId ) === true 
+			 && $checkin->verifyGroupId( $adminId ) === true
+			 && $checkin->hasConnection( $userId, $adminId ) === true ){
 
-				$checkin->addRecord( $authId, $parentId );
+				$checkin->addRecord( $userId, $adminId );
 
 				return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
 
@@ -38,6 +40,8 @@ class CheckinController extends \BaseController {
 
 			// The id in the form did not match the one they are logged in with.
 			// This could be cause they altered the html in the form and the hidden feild
+			dd($userId . ' ' . $adminId);
+			dd($checkin->hasConnection( $userId, $adminId ));
 			return 'Something went wrong';
 
 		}

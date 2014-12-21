@@ -127,7 +127,7 @@ class Connection extends Eloquent {
 	public function availableConnections() 
 	{
 		$adminUsers = new User;
-		$adminUsers = $adminUsers->where( 'group_id', 2 )->get();
+		$adminUsers = $adminUsers->whereRaw( 'group_id = 2 and id != ' . Auth::id() )->get();
 		return $adminUsers;
 	}
 	/*

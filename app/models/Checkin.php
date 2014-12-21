@@ -15,9 +15,9 @@ class Checkin extends Eloquent {
 	/*
 		Establish user relationship
 	 */
-	public function getParent( $parentId )
+	public function getParent( $adminId )
 	{
-		return DB::table('users')->where( 'id', $parentId )->get();
+		return DB::table('users')->where( 'id', $adminId )->get();
 	}
 
 	/*
@@ -31,9 +31,9 @@ class Checkin extends Eloquent {
 	/*
 		Establish parent details relationship
 	 */
-	public function getParentDetails( $parentId )
+	public function getParentDetails( $adminId )
 	{
-		return DB::table('user_details')->where( 'user_id', $parentId )->get();
+		return DB::table('user_details')->where( 'user_id', $adminId )->get();
 	}
 
 	/* 
@@ -77,14 +77,33 @@ class Checkin extends Eloquent {
 		return false;
 
 	}
+	/*
+		Check if the user is already connected to the place they are trying to connect to
+	 */
+	public function hasConnection( $userId, $adminId )
+	{
+		$connections = new Connection;
+		$availableConnections = $connections->connections( $userId );
+		$availableConnections = $connections->explodeStringToArray( $availableConnections );
+
+		if ( ! empty($availableConnections) ){
+			foreach ( $availableConnections as $availableConnection ){
+				if ( $availableConnection === $adminId ){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	/*
 		Add the record to the database DO VALIDATION BEFORE!
 	 */
-	public function addRecord( $authId, $parentId )
+	public function addRecord( $authId, $adminId )
 	{
 		$this->user_id = $authId;
-		$this->parent_id = $parentId;
+		$this->parent_id = $adminId;
 		$this->save();
 
 		return true;

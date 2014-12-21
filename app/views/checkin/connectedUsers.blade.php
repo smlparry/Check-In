@@ -2,7 +2,7 @@
 
 @section('content')
 	
-	<h1>Connected Users:</h1>
+	<h1>Users you have connected to:</h1>
 	<ul>
 		
 		@if ( ! empty( $connectedUsers ) )
