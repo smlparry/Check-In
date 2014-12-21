@@ -14,7 +14,8 @@ Core Functionality
 	/ User can view a feed of when and where they connected last
 	/ Admin can specify what information they require from a user
 	- Allow a user to connect to a place
-		- Dont allow the user to view the account if they have already connected to that account
+		/ Dont allow the user to view the account if they have already connected to that account
+		- Make sure the user meets all the required details before they are able to connected.
 	- Be able to update the user details table.
 	- Front end
 	- Admin dashboard
