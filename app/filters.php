@@ -88,3 +88,14 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+/* 
+	If the user is an admin user, i.e. has a group id of 2
+*/
+Route::filter('admin', function()
+{
+	if ( Auth::guest() || Auth::user()->group_id !== 2 ){
+		return Redirect::to('access-denied');
+	}
+});
+
