@@ -15,6 +15,7 @@
 				<li>{{ $requiredDetail }}</li>
 					{{ Form::text( $requiredDetail ) }}
 			@endforeach 
+			{{ Form::submit( 'Add required details', ['class' => 'btn btn-success'] )}}
 			{{ Form::close()}}
 		</ul>
 	@else
