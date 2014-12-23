@@ -2,7 +2,7 @@
 
 class ConnectionController extends \BaseController {
 
-		/*
+	/*
 		Add a user connection
 	 */ 
 	public function addConnection()
@@ -12,12 +12,14 @@ class ConnectionController extends \BaseController {
 		$userDetails = new UserDetail;
 
 		$userId = Auth::id();
+
+		// Done because of redirecting needs the admin id
 		if ( Input::has('admin_id') ){
 			$adminId = Input::get('admin_id');
 		} elseif ( Session::has( 'admin_id' )) {
 			$adminId = Session::get( 'admin_id' );
 		} else {
-			dd('no admin id specified');
+			$adminId = null;
 		}
 
 		settype($adminId, 'integer');
@@ -31,6 +33,7 @@ class ConnectionController extends \BaseController {
 			$userDetailsArray = $userDetails->userDetailsToArray( $usersDetailObject );
 			$requiredDetailsArray = $connections->explodeStringToArray( $requiredDetails->required_details );
 
+			// Compare the two arrays to see if all the required details are filled out
 			$comparisonResult = $connections->compareRequiredDetails( $userDetailsArray, $requiredDetailsArray );
 
 			if ( $comparisonResult === true ){
@@ -59,9 +62,6 @@ class ConnectionController extends \BaseController {
 	 */
 	public function addRequiredDetails()
 	{
-		$missing = null;
-		$add = null;
-
 		$input = Input::all();
 		$adminId = Input::has('admin_id');
 		$input = array_except( $input, ['_token', 'admin_id'] );
@@ -73,12 +73,32 @@ class ConnectionController extends \BaseController {
 			$isValid = $connection->detailsAreValid( $input , $rules );
 
 			if ( $isValid === true ){
-				return "Success they have entered everything";
+				// Update the default values if it is required
+				$userDetail = new UserDetail;
+				$defaultValuesToBeUpdated = $userDetail->parseForEmptyDefault( $input );
+
+				if ( $defaultValuesToBeUpdated !== false ){
+					$userDetail->updateDefaultDetail( $defaultValuesToBeUpdated, $input );
+					$input = $userDetail->unsetUpdatedDetails( $defaultValuesToBeUpdated, $input);
+				}
+
+				// Update the custom details
+				if ( ! empty($input) ){
+					$userDetails = $userDetail->getUserDetails( Auth::id() );
+					$currentCustomDetails = $userDetails->custom_details;
+
+					$customDetailsToUpdateString = $userDetail->concatinateCustomDetails( $currentCustomDetails, $input );
+					$userDetail->addNewCustomDetails( $customDetailsToUpdateString );
+				}
+
+				$this->addConnection()->with('adminId', $adminId);
+				return View::make('checkin.connectionResponse')->with(['response' => true, 'admin' => $adminId ]);
+
+
 			}
 
-		return Redirect::back()->with( ['admin_id' => $adminId, 'errors' => $isValid] )->withInput();
+			return Redirect::back()->with( ['admin_id' => $adminId, 'errors' => $isValid] )->withInput();
 
 		}
 	}
-
 }

@@ -35,7 +35,6 @@ class AdminController extends \BaseController {
 	{
 		$connection = new Connection;
 		$requiredDetails = $connection->getRequiredDetails( Auth::id() );
-		$requiredDetails = head( $requiredDetails ); 
 		$requiredDetails = $connection->requiredDetailsToArray( $requiredDetails );
 		return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
 	}
