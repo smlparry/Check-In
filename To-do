@@ -17,9 +17,13 @@ Core Functionality
 		/ Dont allow the user to view the account if they have already connected to that account
 		/ Make sure the user meets all the required details before they are able to connected.
 			/ Did all the logic in the check in function. Need to move it to the add connection function. Just copied and pasted what i had into the other function. Start in checkin controller addConnection();
-		- Allow the user to add the required details as they are trying to connect
-			- Try to rewrite with laravels input::old() and errors methods. Currently a little hackish
-	- Be able to update the user details table.
+		/ Allow the user to add the required details as they are trying to connect
+			/ Try to rewrite with laravels input::old() and errors methods. Currently a little hackish
+		- Little bug with incorrect url when adding required details
+			- it is addRequiredDetails needs to be connection-attempt 
+	/ Be able to update the user details table.
+	- Make sure check in is working with required details currently is not
+	- Redirect::intended() for when the user has been requested to login
 	- Front end
 	- Admin dashboard
 		- Graph of total users checking in
