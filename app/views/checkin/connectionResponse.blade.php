@@ -9,13 +9,13 @@
 		<p>The place you are trying to connect to requires more details about you</p>
 		<p>They require:</p>
 		<ul>
+			{{ Form::open( ['route' => 'addRequiredDetails', 'class' => 
+				'form-horizontal'] ) }}
 			@foreach($response as $requiredDetail)
 				<li>{{ $requiredDetail }}</li>
-				{{ Form::open( ['route' => 'addRequiredDetail', 'class' => 
-				'form-horizontal'] ) }}
 					{{ Form::text( $requiredDetail ) }}
-				{{ Form::close()}}
 			@endforeach 
+			{{ Form::close()}}
 		</ul>
 	@else
 		<p>An error occured please try again. {{ link_to('checkin/connect', 'You can try again here') }}</p>

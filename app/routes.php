@@ -22,10 +22,15 @@ Route::group(['before' => 'admin'], function(){
 });
 Route::group(['before' => 'auth'], function(){
 	Route::get('/checkin/history', 'CheckInController@history');
-	Route::get('/checkin/connect', 'CheckinController@connect');
-	Route::post('/checkin/connect', ['as' => 'addConnection', 'uses' => 'CheckinController@addConnection'] );
 	Route::get('/checkin/{uniqueId}', 'CheckinController@index');
 	Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
+});
+
+// Connection Routing
+Route::group(['before' => 'auth'], function(){
+	Route::get('/connect', 'ConnectionController@connect');
+	Route::post('/connect', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
+	Route::post('/connect/addRequiredDetails', ['as' => 'addRequiredDetails', 'uses' => 'ConnectionController@addRequiredDetails'] );
 });
 
 
