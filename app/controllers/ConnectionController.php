@@ -68,17 +68,15 @@ class ConnectionController extends \BaseController {
 
 		if ( count($input) != 0 ){
 
-			foreach ( $input as $key => $value ){
-				if ( ! empty($value) ){
-					$add[] = $key . ',' . $value . '|';
-				} else {
-					$missing[] = $key;
-				}
+			$connection = new Connection;
+			$rules = $connection->makeRequiredRules( $input );
+			$isValid = $connection->detailsAreValid( $input , $rules );
+
+			if ( $isValid === true ){
+				return "Success they have entered everything";
 			}
 
-			if ( count($missing) != 0 ){
-				return Redirect::to('connect/connection-attempt')->with( ['errors' => $missing, 'admin_id' => $adminId] );
-			}
+		return Redirect::back()->with( ['admin_id' => $adminId, 'errors' => $isValid] )->withInput();
 
 		}
 	}

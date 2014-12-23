@@ -17,12 +17,13 @@
 
 				@foreach($response as $requiredDetail)
 					<li>{{ $requiredDetail }}</li>
-						@if ( Session::has('errors') )
-							@if ( in_array( $requiredDetail, $errors ))
-								{{ 'You need to fill out this feild' }}
-							@endif 
-						@endif
 						{{ Form::text( $requiredDetail, Input::old( $requiredDetail ) ) }}
+						@if ( $errors->has( $requiredDetail ) )
+							<div class="alert alert-danger alert-block ">
+								{{ $errors->first( $requiredDetail ) }}
+							</div>
+						@endif
+
 				@endforeach
 				{{ Form::hidden( 'admin_id', $admin ) }}
 				{{ Form::submit( 'Add required details', ['class' => 'btn btn-success'] )}}

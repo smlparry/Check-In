@@ -190,5 +190,33 @@ class Connection extends Eloquent {
 		return $missingDetails;
 
 	}
+	/*
+		Make the rules array for the inputted data
+	 */
+	public function makeRequiredRules( $details )
+	{
+		if ( count($details) !== 0 ){
+			$rules = array();
+			foreach( $details as $key => $value ){
+				$rules = array_add($rules, $key, 'required');
+			}
+			return $rules;
+		}
+		return false;
+	}
+	/*
+		Validated the required details 
+	 */
+	public function detailsAreValid( $details, $rules )
+	{
+		$validation = Validator::make( $details, $rules );
+
+		if ( $validation->passes() ){
+			return true;
+		}
+
+		return $validation->messages();
+
+	}
 
 }

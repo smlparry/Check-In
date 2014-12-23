@@ -118,7 +118,7 @@ class UsersController extends \BaseController {
 		}
 
 	 	// Else return with errors
-		return Redirect::to('register')->with( 'errors', $isValid );
+		return Redirect::back()->with( 'errors', $isValid );
 
 	}
 

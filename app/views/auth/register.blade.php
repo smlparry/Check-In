@@ -10,7 +10,6 @@
 
 			<!-- Name -->
 			<div class="control-group {{{ $errors->has('email') ? 'error' : '' }}}">
-
 				<div class="controls">
 					{{ Form::text( 'email', Input::old('email'), array('placeholder' => 'Email Address') ) }}
 
