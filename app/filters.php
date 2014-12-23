@@ -99,3 +99,10 @@ Route::filter('admin', function()
 	}
 });
 
+Route::filter('hasErrors', function()
+{
+	if ( ! Session::has('errors') ){
+		return Redirect::to('connect');
+	}
+});
+

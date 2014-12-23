@@ -12,7 +12,14 @@ class ConnectionController extends \BaseController {
 		$userDetails = new UserDetail;
 
 		$userId = Auth::id();
-		$adminId = Input::get('admin_id');
+		if ( Input::has('admin_id') ){
+			$adminId = Input::get('admin_id');
+		} elseif ( Session::has( 'admin_id' )) {
+			$adminId = Session::get( 'admin_id' );
+		} else {
+			dd('no admin id specified');
+		}
+
 		settype($adminId, 'integer');
 
 		if ( $adminId !== $userId ){
@@ -28,10 +35,10 @@ class ConnectionController extends \BaseController {
 
 			if ( $comparisonResult === true ){
 				$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-				return View::make('checkin.connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+				return View::make('checkin.connectionResponse')->with( ['response' => $addConnection, 'admin' => $adminId] );
 			}
 
-			return View::make('checkin.connectionResponse')->with( ['response' => $comparisonResult, 'admin' => $input['admin_id'] ]);
+			return View::make('checkin.connectionResponse')->with( ['response' => $comparisonResult, 'admin' => $adminId ]);
 		}
 
 		return "Admin id is the saem as the user id, show a proper error for this. Well dont even let the person get to this stage..";
@@ -45,6 +52,35 @@ class ConnectionController extends \BaseController {
 		$connections = new Connection;
 		$connections = $connections->availableConnections();
 		return View::make('checkin.connect')->with('availableConnections', $connections);
+	}
+
+	/*
+		Add required detail(s) when teh user has been asked after attempting to connect
+	 */
+	public function addRequiredDetails()
+	{
+		$missing = null;
+		$add = null;
+
+		$input = Input::all();
+		$adminId = Input::has('admin_id');
+		$input = array_except( $input, ['_token', 'admin_id'] );
+
+		if ( count($input) != 0 ){
+
+			foreach ( $input as $key => $value ){
+				if ( ! empty($value) ){
+					$add[] = $key . ',' . $value . '|';
+				} else {
+					$missing[] = $key;
+				}
+			}
+
+			if ( count($missing) != 0 ){
+				return Redirect::to('connect/connection-attempt')->with( ['errors' => $missing, 'admin_id' => $adminId] );
+			}
+
+		}
 	}
 
 }

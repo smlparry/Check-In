@@ -29,8 +29,11 @@ Route::group(['before' => 'auth'], function(){
 // Connection Routing
 Route::group(['before' => 'auth'], function(){
 	Route::get('/connect', 'ConnectionController@connect');
-	Route::post('/connect', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
+	Route::post('/connect/connection-attempt', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
 	Route::post('/connect/addRequiredDetails', ['as' => 'addRequiredDetails', 'uses' => 'ConnectionController@addRequiredDetails'] );
+});
+Route::group(['before' => 'hasErrors'], function() {
+	Route::get('/connect/connection-attempt', 'ConnectionController@addConnection');
 });
 
 
