@@ -28,6 +28,7 @@ Route::group(['before' => 'auth'], function(){
 	Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
 });
 
+
 // Admin operations
 Route::group(['before' => 'auth'], function(){
 	Route::get("/dash", "AdminController@dashboard");

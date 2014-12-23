@@ -162,19 +162,15 @@ class Connection extends Eloquent {
 	public function addConnection( $user_id, $admin_id )
 	{
 		settype($admin_id, 'integer');
-
-		if ( $user_id !== $admin_id ){
-
+		try {
 			$currentConnections = $this->where( 'user_id', $user_id )->pluck( 'connections' );
 			$concatinatedConnections = $this->concatinateConnections( $currentConnections, $admin_id );
 			$this->where( 'user_id', $user_id )->update( ['connections' => $concatinatedConnections] );
-
 			return true;
-
+		} catch (Exception $e) {
+			return $e;
 		}
-
-		return false;
-
+		
 	}
 	/*
 		Determine whether the user has all the details required to connect to the admin

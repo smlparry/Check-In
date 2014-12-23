@@ -103,13 +103,13 @@ class CheckinController extends \BaseController {
 
 			if ( $comparisonResult === true ){
 				$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-				return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+				return View::make('checkin.connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
 			}
 
-			return $comparisonResult;
+			return View::make('checkin.connectionResponse')->with( ['response' => $comparisonResult, 'admin' => $input['admin_id'] ]);
 		}
 
-		return "Admin id is the same as user id";
+		return "Admin id is the saem as the user id, show a proper error for this. Well dont even let the person get to this stage..";
 	}
 
 }
