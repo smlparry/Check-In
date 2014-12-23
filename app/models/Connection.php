@@ -5,17 +5,6 @@ class Connection extends Eloquent {
 	protected $fillable = array('user_id', 'connections');
 	
 	/*
-		Simple function to get rid of the array surrounding the returned connections db query object
-	 */
-	public function unArray( $array )
-	{
-		foreach ( $array as $unArray ){
-			$return = $unArray;
-		}
-
-		return $return;
-	}
-	/*
 		Return the users connections
 	 */
 	public function connections( $id )
@@ -72,7 +61,7 @@ class Connection extends Eloquent {
 	 */ 
 	public function getRequiredDetails( $id )
 	{
-		return DB::table('required_details')->where('user_id', $id)->get();
+		return DB::table('required_details')->where( 'user_id', $id )->first();
 	}
 
 	/*
@@ -127,8 +116,7 @@ class Connection extends Eloquent {
 	public function availableConnections() 
 	{
 		$adminUsers = new User;
-		$adminUsers = $adminUsers->whereRaw( 'group_id = 2 and id != ' . Auth::id() )->get();
-		return $adminUsers;
+		return $adminUsers->whereRaw( 'group_id = 2 and id != ' . Auth::id() )->get();
 	}
 	/*
 		Concatinate the connections string with the new conenction, prevent duplicates as well
@@ -186,6 +174,28 @@ class Connection extends Eloquent {
 		}
 
 		return false;
+
+	}
+	/*
+		Determine whether the user has all the details required to connect to the admin
+		If the userDetails array contains the required element it will evaluate to false because it is checking if it is null. If it is true it is added to the missingDetails array which is then tested if it is empty and returned if it is not.
+		THANKS LARAVEL !!! array_pull is mad
+	 */
+	public function compareRequiredDetails( $userDetails, $requiredDetails )
+	{
+		$missingDetails = null;
+
+		foreach( $requiredDetails as $requiredDetail ){
+			if ( $hasDetails[$requiredDetail] = array_pull( $userDetails, $requiredDetail ) === null ){
+				$missingDetails[] = $requiredDetail;
+			}
+		}
+
+		if ( empty( $missingDetails )){
+			return true;
+		}
+
+		return $missingDetails;
 
 	}
 

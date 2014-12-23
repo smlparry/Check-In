@@ -94,7 +94,6 @@ class UsersController extends \BaseController {
 		// Register the user and log them in
 		// Pass onto class function
 		$register = new User;
-		$userDetails = new UserDetail;
 		$userData = $register->userDataToArray( Input::all() );
 		$rules = $register->rulesRegister();
 		$isValid = $register->isValid( $userData, $rules );
@@ -104,11 +103,15 @@ class UsersController extends \BaseController {
 		 	// Register the user
 		 	$register->registerUser( $userData );
 
+		 	// Send off confirmation email
+		 	$register->confirmationEmail( $userData );
+
 		 	// Log the user in
 		 	$register->logUserIn( $userData );
 
-		 	// Add user details row to the database
-		 	$userDetails->addUser( Auth::id() );
+		 	// Add extra rows to the database
+		 	$register->defaultUserDetails( Auth::id() );
+		 	$register->defaultRequiredDetails( Auth::id() );
 
 		 	return Redirect::to('dash')->with( 'success', 'You have successfully logged in!' );
 

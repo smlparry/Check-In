@@ -6,8 +6,9 @@ class TestController extends \BaseController {
 		Random Testing
 	 */
 	public function index()
-	{
-		return "this is where i test shit";
+	{ 
+		$test = new UserDetail;
+		return $test->explodeKeyValueStringToArray( 'color,blue|gym,here|' );
 	}
 
 

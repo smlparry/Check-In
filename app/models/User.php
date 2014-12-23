@@ -120,4 +120,25 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return DB::table('user_details')->where( 'user_id', $id )->get();
 	}
+
+	/*
+		Additional rows when registering a user
+	 */
+	public function defaultUserDetails( $id )
+	{
+		return DB::table('user_details')
+				->insert( ['user_id' => $id,
+				          	'name' => 'Not Specified',
+				          	'address' => 'Not Specified',
+				          	'postcode' => '0000',
+				          	'phone_number' => 'Not Specified'
+				         ]);
+	}
+	public function defaultRequiredDetails ( $id )
+	{
+		return DB::table('required_details')
+				->insert( ['user_id' => $id,
+				         	'required_details' => 'name,email'
+				         ]);
+	}
 }

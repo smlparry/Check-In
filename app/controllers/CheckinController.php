@@ -30,14 +30,8 @@ class CheckinController extends \BaseController {
 			 && $checkin->verifyGroupId( $adminId ) === true
 			 && $checkin->hasConnection( $userId, $adminId ) === true ){
 
-
-			if ( $checkin->compareRequiredDetails( $usersDetails, $requiredDetails ) === true ){
-
 				$checkin->addRecord( $userId, $adminId );
-				return Redirect::to('checkin.history')->with( 'success', 'Successfully checked in' );
-
-			}
-
+				return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
 
 		}
 
@@ -90,18 +84,32 @@ class CheckinController extends \BaseController {
 	{
 		$input = Input::all();
 		$connections = new Connection;
+		$userDetails = new UserDetail;
 
-		// Check if the user meets all the required details, if not return with the details they need to add
-		$usersDetails = $connections->getUserDetails( $userId );
-		$requiredDetails = $connections->getRequiredDetails( $adminId );
-		
+		$userId = Auth::id();
+		$adminId = Input::get('admin_id');
+		settype($adminId, 'integer');
 
-		if ($connections->compareRequiredDetails( $usersDetails, $requiredDetails ) === true){
-			$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
-			return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+		if ( $adminId !== $userId ){
+
+			$usersDetailObject = $userDetails->getUserDetails( $userId );
+			$requiredDetails = $connections->getRequiredDetails( $adminId );
+
+			// Parse the objects into arrays
+			$userDetailsArray = $userDetails->userDetailsToArray( $usersDetailObject );
+			$requiredDetailsArray = $connections->explodeStringToArray( $requiredDetails->required_details );
+
+			$comparisonResult = $connections->compareRequiredDetails( $userDetailsArray, $requiredDetailsArray );
+
+			if ( $comparisonResult === true ){
+				$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
+				return View::make('/checkin/connectionResponse')->with( ['response' => $addConnection, 'admin' => $input['admin_id']] );
+			}
+
+			return $comparisonResult;
 		}
 
-		return Redirect::to('/checkin/connect');
+		return "Admin id is the same as user id";
 	}
 
 }

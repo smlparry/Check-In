@@ -27,9 +27,6 @@ class AdminController extends \BaseController {
 		return View::make('checkin.connectedUsers')->with('connectedUsers', null );
 	} 
 
-	return View::make('checkin.connectedUsers')->with( 'connectedUsers', false );
-
-	}
 
 	/* 
 		Allow the admin to specify what information they require
@@ -38,7 +35,7 @@ class AdminController extends \BaseController {
 	{
 		$connection = new Connection;
 		$requiredDetails = $connection->getRequiredDetails( Auth::id() );
-		$requiredDetails = $connection->unArray( $requiredDetails ); 
+		$requiredDetails = head( $requiredDetails ); 
 		$requiredDetails = $connection->requiredDetailsToArray( $requiredDetails );
 		return View::make('admin.requiredDetails')->with('requiredDetails', $requiredDetails);
 	}

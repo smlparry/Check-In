@@ -20,22 +20,6 @@ class Checkin extends Eloquent {
 		return DB::table('users')->where( 'id', $adminId )->get();
 	}
 
-	/*
-		Establish user relationship
-	 */
-	public function getUserDetails( $userId )
-	{
-		return DB::table('user_details')->where( 'user_id', $userId )->get();
-	}
-
-	/*
-		Establish parent details relationship
-	 */
-	public function getParentDetails( $adminId )
-	{
-		return DB::table('user_details')->where( 'user_id', $adminId )->get();
-	}
-
 	/* 
 		Get the parent id from the unique id
 	*/
@@ -136,9 +120,11 @@ class Checkin extends Eloquent {
 
 		if ( count( $history ) != 0 ){
 
+			$parentDetail = new UserDetail;
+
 			foreach ( $history as $historyItem ){
 
-				$historyParentDetails = $this->getParentDetails( $historyItem['parent_id'] );
+				$historyParentDetails = $parentDetail->getUserDetails( $historyItem['parent_id'] );
 
 				$historyData[] = [
 						'parent_details_data' => $historyParentDetails,
@@ -164,18 +150,20 @@ class Checkin extends Eloquent {
 	}
 
 	/*
-		Get the details for the users who haev connected
+		Get the details for the users who have connected
 	 */
 	public function feedUsers( $feed )
 	{	
 
 		if ( count($feed) !== 0 ){
 
+			$userDetail = new UserDetail;
+
 			foreach( $feed as $feedItem ){
 
 				$feedDetails[] = [
 						'user' => User::find( $feedItem->user_id ),
-						'user_details' => $this->getUserDetails( $feedItem->user_id )
+						'user_details' => $userDetail->getUserDetails( $feedItem->user_id )
 					];
 
 			}	
