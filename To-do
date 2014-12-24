@@ -34,3 +34,9 @@ Core Functionality
 Not Core
 	- Confirmation of check in ?
 	- Geo-Location to check in
+
+Laracast cool things:
+	- Faker library for seeding database.
+		- sudo composer search faker
+		- laracasts/Incremental Apis/We need dummy data
+		
