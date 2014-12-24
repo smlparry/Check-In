@@ -100,7 +100,7 @@ class Checkin extends Eloquent {
 	 */
 	public function history( $id )
 	{
-		return $this->where( 'user_id', $id )->get();
+		return $this->where( 'user_id', $id )->get()->toArray();
 	}
 
 	/*

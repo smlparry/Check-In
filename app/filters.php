@@ -95,7 +95,12 @@ Route::filter('csrf', function()
 Route::filter('admin', function()
 {
 	if ( Auth::guest() || Auth::user()->group_id !== 2 ){
-		return Redirect::to('access-denied');
+		return Response::json([
+	                     'error' => [
+		                     'message' => 'You do not have the correct permissions to access this page'
+	                     ], 
+	                     'status_code' => 403
+	                ], 403);
 	}
 });
 

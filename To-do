@@ -39,4 +39,11 @@ Laracast cool things:
 	- Faker library for seeding database.
 		- sudo composer search faker
 		- laracasts/Incremental Apis/We need dummy data
-		
+
+Things i want to redo
+	- Make and api for viewing feed and stuff like that
+
+New To Do
+	- Add user and parent details to the transformed array. Allow this to be required if needed by passing a variabe? 
+	- Eager load the user in to the feed object
+

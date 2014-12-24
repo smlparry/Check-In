@@ -1,26 +1,43 @@
 <?php
 
-class CheckinController extends \BaseController {
+use Checkin\Transformers\FeedTransformer;
 
-	/*
-		Show the check in page
+class CheckinController extends ApiController {
+
+	protected $feedTransformer;
+	protected $checkin;
+
+	/**
+	 * [__construct description]
+	 * @param FeedTransformer $feedTransformer [description]
+	 * @param Checkin         $checkin         [description]
+	 */
+	public function __construct(FeedTransformer $feedTransformer, Checkin $checkin)
+	{
+		$this->feedTransformer = $feedTransformer;
+		$this->checkin = $checkin;
+	}
+
+
+	/**
+	 * [index description]
+	 * @param  [type] $uniqueId [description]
+	 * @return [type]           [description]
 	 */
 	public function index( $uniqueId )
 	{
-		$checkInPrep = new Checkin;
-		$parentId = $checkInPrep->getParentId( $uniqueId );
+		$parentId = $checkin->getParentId( $uniqueId );
 
 		return View::make('checkin.before', ['parentId' => $parentId ]);
 	}
 
-	/*
-		Series of validation then add the record to teh feed database table
-		Check the user in
+	/**
+	 * Series of validation then check the user in
+	 * @return [type] [description]
 	 */
 	public function checkUserIn() 
 	{
 		// First check if the user is logged in
-		$checkin = new Checkin;
 		$formId	= Input::get('id');
 		$adminId = Input::get('parent_id');
 		$userId = Auth::id();
@@ -36,34 +53,55 @@ class CheckinController extends \BaseController {
 		}
 
 		// The id in the form did not match the one they are logged in with.
-		// This could be cause they altered the html in the form and the hidden feild
+		// this could be cause they altered the html in the form and the hidden feild
 		return 'Something went wrong';
 	}
 
-	/*
-		Show the users check in history
+	/**
+	 * Show the users check in history
+	 * @return [type] [description]
 	 */
 	public function history() 
 	{
+		
+		$history = $this->checkin->history( Auth::id() );
 
-		$checkin = new Checkin;
-		$history = $checkin->history( Auth::id() );
-		$parents = $checkin->historyParents( $history ); 
-		return View::make( 'checkin.history', [ 'history' => $parents ] );
-
-	}
-
-	public function feed()
-	{
-		$checkinFeed = new Checkin;
-
-		if ( $checkinFeed->verifyGroupId( Auth::id() ) === true ){
-			$feed = $checkinFeed->feed( Auth::id() );
-			$users = $checkinFeed->feedUsers( $feed ); 
-			return View::make( 'checkin.feed', [ 'feed' => $users ] );
+		if ( ! $history )
+		{
+			return $this->respondNoResults();
 		}
 
-		return View::make( 'checkin.feed', ['feed' => false] );
+		$history = $this->historyTransformer->transformCollection( $history );
+		return $this->respondWithResults( 'history', $history );
+		// $history = $checkin->history( Auth::id() );
+		// $parents = $checkin->historyParents( $history ); 
+		// return View::make( 'checkin.history', [ 'history' => $parents ] );
+	}
+
+	/**
+	 * Get the admins feed of checked in users
+	 * @return [type]     [description]
+	 */
+	public function feed()
+	{
+
+		$feed = $this->checkin->where( 'parent_id', Auth::id() )->get()->toArray();
+
+		if ( ! $feed ) 
+		{
+			return $this->respondNoResults();
+		}
+
+		$feed = $this->feedTransformer->transformCollection( $feed );
+		return $this->respondWithResults( 'feed_items', $feed );
+
+		// if ( $checkinFeed->verifyGroupId( Auth::id() ) === true ){
+		// 	$feed = $checkinFeed->feed( Auth::id() );
+		// 	$users = $checkinFeed->feedUsers( $feed ); 
+		// 	return View::make( 'checkin.feed', [ 'feed' => $users ] );
+		// }
+
+		// return View::make( 'checkin.feed', ['feed' => false] );
 
 	}
 

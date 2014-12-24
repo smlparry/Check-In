@@ -14,6 +14,7 @@ class UserDetail extends Eloquent {
 
 	// Table used by the model
 	protected $table = 'user_details';
+	protected $hidden = ['id', 'created_at', 'updated_at'];
 
 	public function thishappens()
 	{
@@ -24,6 +25,14 @@ class UserDetail extends Eloquent {
 	public function getUserDetails( $id )
 	{
 		return $this->where( 'user_id', $id )->first();
+	}
+
+	public function getUserDetailsFeed( $id )
+	{
+		$userDetails = $this->getUserDetails( $id );
+		$userDetails->custom_details = $this->explodeKeyValueStringToArray($userDetails->custom_details);
+		return $userDetails;
+
 	}
 	/*
 		Put user details database query into an easy to parse array
