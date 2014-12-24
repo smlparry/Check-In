@@ -4,6 +4,11 @@
 Route::get('/', 'PagesController@landing');
 Route::get('/access-denied', 'PagesController@accessDenied');
 
+// Api routing
+Route::group(['prefix' => 'api/v1'], function(){
+	
+});
+
 // Auth Routing
 Route::group(['before' => 'guest'], function(){
 	Route::resource("/login", "UsersController");

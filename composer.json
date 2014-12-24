@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*"
 	},
 	"require-dev": {
-    	"panique/laravel-sass": "dev-master"
+    	"panique/laravel-sass": "dev-master",
+    	"way/generators": "~2.0"
 	},
 	"autoload": {
 		"classmap": [
