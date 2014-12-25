@@ -1,9 +1,9 @@
 <?php
 
-// Event listener
-Event::listen('illuminate.query', function($query){
-	var_dump($query);
-});
+// // Event listener
+// Event::listen('illuminate.query', function($query){
+// 	var_dump($query);
+// });
 
 // Main Pages
 Route::get('/', 'PagesController@landing');
@@ -12,16 +12,16 @@ Route::get('/access-denied', 'PagesController@accessDenied');
 // Api routing
 Route::group(['prefix' => 'api/v1'], function(){
 
-	// Check in
-	Route::group(['before' => 'admin'], function(){
+	// Check in routing
+	Route::group(['before' => 'api.admin'], function(){
 		Route::get('/checkin/feed', 'CheckinController@feed');
 	});
+	Route::group(['before' => 'api.auth'], function(){
+		Route::get('/checkin/history', 'CheckInController@history');
+		Route::get('/checkin/{uniqueId}', 'CheckinController@index');
+		Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
+	});
 
-
-	// ### Auth required ###
-	Route::get('/checkin/history', 'CheckInController@history');
-	Route::get('/checkin/{uniqueId}', 'CheckinController@index');
-	Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
 
 });
 

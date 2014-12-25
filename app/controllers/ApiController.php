@@ -77,7 +77,10 @@ class ApiController extends \BaseController {
 	{
 		return $this->setStatusCode(403)->respondWithError( $message );
 	}
-
+	public function respondInvalidCheckin( $message = 'User does not have correct permissions to be checked into.')
+	{
+		return $this->setStatusCode(403)->respondWithError( $message );
+	}
 	
 
 }

@@ -11,7 +11,12 @@ class Checkin extends Eloquent {
 	 * @var string
 	 */
 	protected $table = 'feed';
+	protected $hidden = ['id', 'updated_at'];
 
+	public function userDetails()
+	{
+		return $this->hasOne('UserDetail', 'user_id');
+	}
 	/*
 		Establish user relationship
 	 */

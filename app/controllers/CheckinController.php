@@ -1,21 +1,39 @@
 <?php
 
 use Checkin\Transformers\FeedTransformer;
+use Checkin\Transformers\HistoryTransformer;
+use Checkin\Transformers\checkinTransformer;
+
 
 class CheckinController extends ApiController {
 
-	protected $feedTransformer;
+	protected $user;
 	protected $checkin;
+	protected $userDetail;
+	protected $feedTransformer;
+	protected $historyTransformer;
+	protected $checkinTransformer;
 
 	/**
 	 * [__construct description]
-	 * @param FeedTransformer $feedTransformer [description]
-	 * @param Checkin         $checkin         [description]
+	 * @param FeedTransformer    $feedTransformer    [description]
+	 * @param Checkin            $checkin            [description]
+	 * @param UserDetail         $userDetail         [description]
+	 * @param HistoryTransformer $historyTransformer [description]
 	 */
-	public function __construct(FeedTransformer $feedTransformer, Checkin $checkin)
+	public function __construct(User $user,
+	                            Checkin $checkin,
+								UserDetail $userDetail,
+								HistoryTransformer $historyTransformer,
+								FeedTransformer $feedTransformer,
+								CheckinTransformer $checkinTransformer)
 	{
-		$this->feedTransformer = $feedTransformer;
+		$this->user = $user;
 		$this->checkin = $checkin;
+		$this->userDetail = $userDetail;
+		$this->feedTransformer = $feedTransformer;
+		$this->historyTransformer = $historyTransformer;
+		$this->checkinTransformer = $checkinTransformer;
 	}
 
 
@@ -26,9 +44,32 @@ class CheckinController extends ApiController {
 	 */
 	public function index( $uniqueId )
 	{
-		$parentId = $checkin->getParentId( $uniqueId );
+		$parent = $this->user->whereUniqueId( $uniqueId )->pluck( 'id' );
 
-		return View::make('checkin.before', ['parentId' => $parentId ]);
+		if ( ! $parent )
+		{
+			return $this->respondNoResults();
+		}
+
+		// Get the details
+		$parentDetails = $this->userDetail->with('user')->whereUserId( $parent )->first()->toArray();
+
+		if ( ! $parentDetails )
+		{
+			return $this->respondNoResults();
+		}
+
+		// Check if admin
+		if ( $parentDetails['user']['group_id'] !== 2 )
+		{
+			return $this->respondInvalidCheckin();
+		}
+
+		// Transform and respond
+		$checkin = $this->checkinTransformer->transform( $parentDetails );
+		return $this->respondWithResults( 'details', $checkin );
+
+		//return View::make('checkin.before', ['parentId' => $parentId ]);
 	}
 
 	/**
@@ -64,7 +105,7 @@ class CheckinController extends ApiController {
 	public function history() 
 	{
 		
-		$history = $this->checkin->history( Auth::id() );
+		$history = $this->checkin->with('userDetails')->whereUserId( Auth::id() )->get()->toArray();
 
 		if ( ! $history )
 		{
@@ -73,6 +114,7 @@ class CheckinController extends ApiController {
 
 		$history = $this->historyTransformer->transformCollection( $history );
 		return $this->respondWithResults( 'history', $history );
+
 		// $history = $checkin->history( Auth::id() );
 		// $parents = $checkin->historyParents( $history ); 
 		// return View::make( 'checkin.history', [ 'history' => $parents ] );
@@ -85,7 +127,7 @@ class CheckinController extends ApiController {
 	public function feed()
 	{
 
-		$feed = $this->checkin->where( 'parent_id', Auth::id() )->get()->toArray();
+		$feed = $this->checkin->with('userDetails')->whereParentId( Auth::id() )->get()->toArray();
 
 		if ( ! $feed ) 
 		{

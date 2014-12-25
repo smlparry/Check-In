@@ -14,17 +14,11 @@ class UserDetail extends Eloquent {
 
 	// Table used by the model
 	protected $table = 'user_details';
-	protected $hidden = ['id', 'created_at', 'updated_at'];
+	protected $hidden = ['id', 'user_id', 'created_at', 'updated_at'];
 
-	public function thishappens()
+	public function user()
 	{
-		return $this->all();
-	}
-
-
-	public function getUserDetails( $id )
-	{
-		return $this->where( 'user_id', $id )->first();
+		return $this->hasOne('User', 'id');
 	}
 
 	public function getUserDetailsFeed( $id )

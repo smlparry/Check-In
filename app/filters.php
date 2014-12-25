@@ -47,6 +47,25 @@ Route::filter('auth', function()
 		}
 	}
 });
+Route::filter('api.auth', function()
+{
+	if (Auth::guest())
+	{
+		if (Request::ajax())
+		{
+			return Response::make('Unauthorized', 401);
+		}
+		else
+		{
+			return Response::json([
+	                     'error' => [
+		                     'message' => 'You must be logged in to access this page'
+	                     ], 
+	                     'status_code' => 401
+	                ], 401);
+		}
+	}
+});
 
 
 Route::filter('auth.basic', function()
@@ -92,7 +111,7 @@ Route::filter('csrf', function()
 /* 
 	If the user is an admin user, i.e. has a group id of 2
 */
-Route::filter('admin', function()
+Route::filter('api.admin', function()
 {
 	if ( Auth::guest() || Auth::user()->group_id !== 2 ){
 		return Response::json([

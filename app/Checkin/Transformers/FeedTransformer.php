@@ -8,10 +8,12 @@ class FeedTransformer extends Transformer {
 	 * @return [type]       [description]
 	 */
 	public function transform( $feed )
-	{
+	{	
+		$feed['user_details']['custom_details'] = $this->userDetail->explodeKeyValueStringToArray($feed['user_details']['custom_details']);
+
 		return [
-			'checked_in_user' =>  $this->userDetail->getUserDetailsFeed( $feed['user_id'] ),
-			'checked_in_at' => $feed['created_at']
+			'checked_in_user' =>  $feed['user_details'],
+			'checked_in_time' => $feed['created_at']
 		];
 	}
 

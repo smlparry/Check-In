@@ -7,8 +7,8 @@ class TestController extends \BaseController {
 	 */
 	public function index()
 	{ 
-		$test = new UserDetail;
-		return $test->explodeKeyValueStringToArray( 'color,blue|gym,here|' );
+		$users = User::with('userDetails')->whereId(4)->first();
+		var_dump($users->userDetails->name);
 	}
 
 

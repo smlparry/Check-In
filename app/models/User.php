@@ -23,7 +23,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = ['id', 'password', 'remember_token'];
+
+	/*
+		Relationship
+	 */
+	public function userDetails()
+	{
+		return $this->hasOne('UserDetail');
+	}
 
 	/* 
 		Simple function to return an array of the input
@@ -37,6 +45,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		);
 
 	}
+
+
 
 	/*
 		Rules for registration
@@ -116,10 +126,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	/* 
 		Get the users details
 	*/
-	public function userDetails( $id )
-	{
-		return DB::table('user_details')->where( 'user_id', $id )->get();
-	}
+	// public function userDetails( $id )
+	// {
+	// 	return DB::table('user_details')->where( 'user_id', $id )->get();
+	// }
 
 	/*
 		Additional rows when registering a user
