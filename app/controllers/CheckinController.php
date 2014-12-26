@@ -83,19 +83,38 @@ class CheckinController extends ApiController {
 		$adminId = Input::get('parent_id');
 		$userId = Auth::id();
 
-		// Validation
-		if ( $checkin->verifyAuth( $userId, $formId ) === true 
-			 && $checkin->verifyGroupId( $adminId ) === true
-			 && $checkin->hasConnection( $userId, $adminId ) === true ){
+		settype($formId, 'integer');
 
-				$checkin->addRecord( $userId, $adminId );
-				return Redirect::to('checkin/history')->with( 'success', 'Successfully checked in' );
-
+		// Nothing can be null
+		if ( ! $formId or ! $adminId or ! $userId )
+		{
+			return $this->respondInvalidRequest();
 		}
 
-		// The id in the form did not match the one they are logged in with.
-		// this could be cause they altered the html in the form and the hidden feild
-		return 'Something went wrong';
+		// User that is trying to check in is not what was posted from the form
+		if ( $formId !== $userId )
+		{
+			return $this->respondAccessDenied();
+		}
+
+		$admin = $this->user->find( $adminId );
+
+		// Check if requested admin has correct permissions
+		if ( $admin->group_id !== 2 )
+		{
+			return $this->respondInvalidCheckin();
+		}
+
+		// Check if the current user has connected to the admin
+		if ( ! $this->checkin->hasConnection( $userId, $adminId ) )
+		{
+			return $this->respondInvalidCheckin( 'You must establish a connection with user before you can check in.');
+		}
+
+		$this->checkin->addRecord( $userId, $adminId );
+
+		return $this->respondSuccessfullCheckin( 'Successfully Checked In', $admin );
+
 	}
 
 	/**

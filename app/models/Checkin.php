@@ -68,8 +68,7 @@ class Checkin extends Eloquent {
 	public function hasConnection( $userId, $adminId )
 	{
 		$connections = new Connection;
-		$availableConnections = $connections->connections( $userId );
-		$availableConnections = $connections->explodeStringToArray( $availableConnections );
+		$availableConnections = $connections->explodeStringToArray( $connections->connections( $userId ) );
 
 		if ( ! empty($availableConnections) ){
 			foreach ( $availableConnections as $availableConnection ){

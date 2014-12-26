@@ -22,6 +22,14 @@ Route::group(['prefix' => 'api/v1'], function(){
 		Route::post('/checkin', ['as' => 'checkUserIn', 'uses' => 'CheckinController@checkUserIn'] );
 	});
 
+	// Connection routing
+	Route::group(['before' => 'auth'], function(){
+		Route::get('/connect', 'ConnectionController@connect');
+		Route::post('/connect/connection-attempt', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
+		Route::post('/connect/addRequiredDetails', ['as' => 'addRequiredDetails', 'uses' => 'ConnectionController@addRequiredDetails'] );
+	});
+	
+
 
 });
 

@@ -49,6 +49,15 @@ class ApiController extends \BaseController {
 		                ]);
 	}
 
+	public function respondWithSuccess( $message, $data )
+	{
+		return $this->respond([
+	                      'message' => $message,
+	                      'data' => $data,
+	                      'status_code' => $this->getStatusCode()
+			            ]);
+	}
+
 	/**
 	 * Respond with the results
 	 * @param  [type] $resultType [The name of the results that are being shown]
@@ -73,14 +82,24 @@ class ApiController extends \BaseController {
 		return $this->setStatusCode(404)->respondWithError( $message );
 	}	
 
-	public function respondAccessDenied( $message = 'You do not have the correct permissions to access this page.')
+	public function respondAccessDenied( $message = 'You do not have the correct permissions to perform this request.')
 	{
 		return $this->setStatusCode(403)->respondWithError( $message );
 	}
+
 	public function respondInvalidCheckin( $message = 'User does not have correct permissions to be checked into.')
 	{
 		return $this->setStatusCode(403)->respondWithError( $message );
 	}
-	
+
+	public function respondInvalidRequest( $message = 'Additional arguments need to be supplied')
+	{
+		return $this->setStatusCode(412)->respondWithError( $message );
+	}
+
+	public function respondSuccessfullCheckin( $message = 'Successfully Checked In', $adminObject )
+	{
+		return $this->setStatusCode(200)->respondWithSuccess( $message, $adminObject );
+	}
 
 }
