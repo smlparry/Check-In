@@ -9,9 +9,7 @@ class Connection extends Eloquent {
 	 */
 	public function connections( $id )
 	{
-
 		return $this->where( 'user_id', $id )->pluck( 'connections' );
-
 	}
 
 	/*
@@ -61,7 +59,7 @@ class Connection extends Eloquent {
 	 */ 
 	public function getRequiredDetails( $id )
 	{
-		return DB::table('required_details')->where( 'user_id', $id )->first();
+		return DB::table('required_details')->where( 'user_id', $id )->pluck( 'required_details' );
 	}
 
 	/*
@@ -115,8 +113,7 @@ class Connection extends Eloquent {
 	 */
 	public function availableConnections() 
 	{
-		$adminUsers = new User;
-		return $adminUsers->whereRaw( 'group_id = 2 and id != ' . Auth::id() )->get();
+		return User::with( 'userDetails' )->whereRaw( 'group_id = 2 and id != ' . Auth::id() )->get();
 	}
 	/*
 		Concatinate the connections string with the new conenction, prevent duplicates as well

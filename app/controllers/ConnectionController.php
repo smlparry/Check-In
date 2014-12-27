@@ -1,40 +1,87 @@
 <?php
 
-class ConnectionController extends \BaseController {
+use Checkin\Transformers\ConnectionTransformer;
+
+class ConnectionController extends ApiController {
+
+	protected $user;
+	protected $connection;
+	protected $userDetail;
+	protected $connectionTransformer;
+
+	public function __construct(User $user,
+	                            UserDetail $userDetail,
+	                            Connection $connection,
+	                            ConnectionTransformer $connectionTransformer)
+	{
+		$this->user = $user;
+		$this->userDetail = $userDetail;
+		$this->connection = $connection;
+		$this->connectionTransformer = $connectionTransformer;
+	}
+
+	/*
+		Display a listing of all the places the user can connect to
+	 */
+	public function connect()
+	{
+		$connections = $this->connection->availableConnections()->toArray();
+
+		if ( ! $connections )
+		{
+			return $this->respondNoResults();
+		}
+
+		$connections = $this->connectionTransformer->transformCollection( $connections );
+		return $this->respondWithResults( 'data' , $connections );
+
+	}
 
 	/*
 		Add a user connection
 	 */ 
 	public function addConnection()
 	{
-		$input = Input::all();
-		$connections = new Connection;
-		$userDetails = new UserDetail;
-
 		$userId = Auth::id();
 
-		// Done because of redirecting needs the admin id
+		// Admin id needs to be retained when adding extra details
 		if ( Input::has('admin_id') ){
 			$adminId = Input::get('admin_id');
 		} elseif ( Session::has( 'admin_id' )) {
 			$adminId = Session::get( 'admin_id' );
-		} else {
-			$adminId = null;
-		}
+		} 
 
+		// stupid types
 		settype($adminId, 'integer');
 
-		if ( $adminId !== $userId ){
+		if ( ! $userId or ! $adminId )
+		{
+			return $this->respondInvalidRequest();
+		}
 
-			$usersDetailObject = $userDetails->getUserDetails( $userId );
-			$requiredDetails = $connections->getRequiredDetails( $adminId );
+		if ( $adminId === $userId )
+		{
+			return $this->respondAccessDenied( 'Cannot connect to yourself.' );
+		}
 
-			// Parse the objects into arrays
-			$userDetailsArray = $userDetails->userDetailsToArray( $usersDetailObject );
-			$requiredDetailsArray = $connections->explodeStringToArray( $requiredDetails->required_details );
+		$userDetails = $this->userDetail->find( $userId )->first()->toArray();
+		$userDetails['custom_details'] = $this->userDetail->explodeKeyValueStringToArray( $userDetails['custom_details'] );
 
-			// Compare the two arrays to see if all the required details are filled out
-			$comparisonResult = $connections->compareRequiredDetails( $userDetailsArray, $requiredDetailsArray );
+		$requiredDetails = $this->connection->getRequiredDetails( $adminId );
+		$requiredDetails = $this->connection->explodeStringToArray( $requiredDetails );
+			
+		// Compare the two arrays to see if all the required details are filled out
+		$comparisonResult = $this->connection->compareRequiredDetails( $userDetails, $requiredDetails );
+
+		##############
+		// This needs to return an error message with the required details that still need to be filled out
+		#############
+		if ( $comparisonResult !== true )
+		{
+			return $this->returnWithRequiredDetails( $comparisonResult );
+		}
+
+		dd( $comparisonResult );
 
 			if ( $comparisonResult === true ){
 				$addConnection = $connections->addConnection( Auth::id(), $input['admin_id'] );
@@ -42,20 +89,9 @@ class ConnectionController extends \BaseController {
 			}
 
 			return View::make('checkin.connectionResponse')->with( ['response' => $comparisonResult, 'admin' => $adminId ]);
-		}
 
-		return "Admin id is the saem as the user id, show a proper error for this. Well dont even let the person get to this stage..";
 	}
 
-	/*
-		display a listing of all the places the user can connect to
-	 */
-	public function connect()
-	{
-		$connections = new Connection;
-		$connections = $connections->availableConnections();
-		return View::make('checkin.connect')->with('availableConnections', $connections);
-	}
 
 	/*
 		Add required detail(s) when teh user has been asked after attempting to connect

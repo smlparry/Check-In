@@ -78,7 +78,7 @@ class CheckinController extends ApiController {
 	 */
 	public function checkUserIn() 
 	{
-		// First check if the user is logged in
+		// Details from form
 		$formId	= Input::get('id');
 		$adminId = Input::get('parent_id');
 		$userId = Auth::id();
