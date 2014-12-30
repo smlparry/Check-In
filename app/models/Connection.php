@@ -37,27 +37,16 @@ class Connection extends Eloquent {
 	 */
 	public function connectionUserDetails( $connections )
 	{
+		foreach ( $connections as $connectedUser ){
+			$users = $user->find( $connectedUser );
+			$userDetails = $user->userDetails( $connectedUser );
 
-		if ( $connections !== false ){
-
-			$user = new User;
-				
-			foreach ( $connections as $connectedUser ){
-
-				$users = $user->find( $connectedUser );
-				$userDetails = $user->userDetails( $connectedUser );
-
-				$connectedUserDetails[] = [
-							'user' => $users,
-							'user_details' => $userDetails
-						];
-			}
-
-			return $connectedUserDetails;
+			$connectedUserDetails[] = [
+						'user' => $users,
+						'user_details' => $userDetails
+					];
 		}
-
-		return false;
-
+		return $connectedUserDetails;
 	}
 	/*
 		Get the details the admin has specified they require

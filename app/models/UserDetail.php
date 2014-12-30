@@ -161,4 +161,17 @@ class UserDetail extends Eloquent {
 		return $this->whereUserId( Auth::id() )->update( ['custom_details' => $customDetailsString] );
 
 	}
+
+	// Takes an array of user details for all the users passed through then sets an array with the keys the user id
+	public function userDetailsToArrayWithUserIdAsKey( $userDetails )
+	{
+		$userDetailsArray = array();
+		foreach( $userDetails as $userDetail )
+		{
+			$userDetail->custom_details = $this->explodeKeyValueStringToArray( $userDetail->custom_details ); 
+			$userDetailsArray = array_add( $userDetailsArray, $userDetail->user_id, $userDetail->toArray() ); 
+		}
+
+		return $userDetailsArray;
+	}
 }

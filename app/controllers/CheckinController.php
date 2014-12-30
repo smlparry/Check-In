@@ -158,7 +158,7 @@ class CheckinController extends ApiController {
 
 		$connectedUsers = $this->feed->connectedUserIds( $feed );
 		$feedUsers = $this->userDetail->whereIn('user_id', $connectedUsers)->get();
-		$feedUsers = $this->feed->feedUserDetails( $feedUsers );
+		$feedUsers = $this->userDetail->userDetailsToArrayWithUserIdAsKey( $feedUsers );
 
 		$feed = $this->feedTransformer->transformCollection( $feed , $feedUsers );
 		return $this->respondWithResults( 'feed_items', $feed );

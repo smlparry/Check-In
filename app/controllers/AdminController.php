@@ -1,12 +1,23 @@
 <?php
 
+use Checkin\Transformers\ConnectedUsersTransformer;
+
 class AdminController extends ApiController {
 
 	protected $connection;
+	protected $connectedUser;
+	protected $userDetail;
+	protected $connectedUsersTransformer;
 	
-	public function __construct(Connection $connection)
+	public function __construct(Connection $connection,
+	                            ConnectedUser $connectedUser,
+	                            UserDetail $userDetail,
+	                            ConnectedUsersTransformer $connectedUsersTransformer)
 	{
 		$this->connection = $connection;
+		$this->connectedUser = $connectedUser;
+		$this->userDetail = $userDetail;
+		$this->connectedUsersTransformer = $connectedUsersTransformer;
 	}
 
 	/*
@@ -22,24 +33,22 @@ class AdminController extends ApiController {
 	 */
 	public function connectedUsers()
 	{
-		$connections = $this->connection->connections( Auth::id() );
 
-		if ( ! $connections )
+		$connectedUsers = $this->connectedUser->whereUserId( Auth::id() )->pluck('connected_users');
+		dd($connectedUsers);
+		if ( ! $connectedUsers )
 		{
 			return $this->respondNoResults();
 		}
 
+		// Parse the connectedUsers string
+		$connectedUsers = $this->connection->explodeStringToArray( $connectedUsers );
+		$connectedUsers = $this->userDetail->whereIn( 'user_id', $connectedUsers )->get()->toArray();
 		
-		dd($connections);
-		$connectedUsers = $connections->connections( Auth::id() );
-		$connectedUsers = $connections->explodeStringToArray( $connectedUsers );
-		$connectedUserDetails = $connections->connectionUserDetails( $connectedUsers );
+		// Transform and respond
+		$connectedUsers = $this->connectedUsersTransformer->transformCollection( $connectedUsers );
+		return $this->respondWithResults('connected_users', $connectedUsers);
 
-		if ( ! empty($connectedUserDetails) ){
-			return View::make('checkin.connectedUsers')->with( 'connectedUsers', $connectedUserDetails );
-		}
-
-		return View::make('checkin.connectedUsers')->with('connectedUsers', null );
 	} 
 
 
