@@ -1,21 +1,25 @@
 <?php
 
-Class ConnectionsTableSeeder extends Seeder {
+use Faker\Factory as Faker;
 
-	public function run(){
+class ConnectionsTableSeeder extends Seeder {
 
-		// to use non Eloquent-functions we need to unguard
-        Eloquent::unguard();
+	public function run()
+	{
+		$faker = Faker::create();
 
-        // All existing users are deleted !!!
-        DB::table('connections')->delete();
+		foreach(range(1, 50) as $index)
+		{
+			$connections = $faker->numberBetween($min = 1, $max = 50) . ',' . 
+							$faker->numberBetween($min = 1, $max = 50) . ',' .
+							$faker->numberBetween($min = 1, $max = 50) . ',' .
+							$faker->numberBetween($min = 1, $max = 50);
 
-        // Add the seeded records
-		DB::table('connections')->insert([
-		                          'user_id' => 2,
-		                          'connections' => '1'
-					        ]); 
-
+			Connection::create([
+                  'user_id' => $index,
+                  'connections' => $connections
+			]);
+		}
 	}
 
 }

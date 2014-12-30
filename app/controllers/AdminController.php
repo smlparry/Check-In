@@ -1,6 +1,13 @@
 <?php
 
-class AdminController extends \BaseController {
+class AdminController extends ApiController {
+
+	protected $connection;
+	
+	public function __construct(Connection $connection)
+	{
+		$this->connection = $connection;
+	}
 
 	/*
 		Return the dashboard
@@ -11,11 +18,19 @@ class AdminController extends \BaseController {
 		return View::make("admin.dashboard");
 	}
 	/*
-		Get a list of the connected users 
+		Get a list of the users who have connected to the admin
 	 */
 	public function connectedUsers()
-	{	
-		$connections = new Connection;
+	{
+		$connections = $this->connection->connections( Auth::id() );
+
+		if ( ! $connections )
+		{
+			return $this->respondNoResults();
+		}
+
+		
+		dd($connections);
 		$connectedUsers = $connections->connections( Auth::id() );
 		$connectedUsers = $connections->explodeStringToArray( $connectedUsers );
 		$connectedUserDetails = $connections->connectionUserDetails( $connectedUsers );

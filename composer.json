@@ -11,7 +11,7 @@
 	"require-dev": {
     	"panique/laravel-sass": "dev-master",
     	"way/generators": "~2.0",
-		"fzaninotto/faker": "~1.4"
+		"fzaninotto/faker": "v1.3.0"
 	},
 	"autoload": {
 		"classmap": [

@@ -4,12 +4,16 @@ class Connection extends Eloquent {
 
 	protected $fillable = array('user_id', 'connections');
 	
+	public function userDetail()
+	{
+		return $this->hasOne('UserDetail', 'user_id');
+	}	
 	/*
 		Return the users connections
 	 */
 	public function connections( $id )
 	{
-		return $this->where( 'user_id', $id )->pluck( 'connections' );
+		return $this->whereUserId( Auth::id() )->pluck( 'connections' );
 	}
 
 	/*

@@ -28,8 +28,12 @@ Route::group(['prefix' => 'api/v1'], function(){
 		Route::post('/connect/connection-attempt', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
 		Route::post('/connect/add-details', ['as' => 'addDetails', 'uses' => 'ConnectionController@addDetails'] );
 	});
-	
 
+	Route::group(['before' => 'api.admin'], function(){
+		Route::get('admin/users', 'AdminController@connectedUsers');
+		Route::get('admin/required-details', 'AdminController@getRequiredDetails');
+		Route::post('admin/required-details', ['as' => 'storeRequiredDetails', 'uses' => 'AdminController@storeRequiredDetails']);
+	});
 
 });
 
