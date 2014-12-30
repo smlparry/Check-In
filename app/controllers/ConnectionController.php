@@ -2,6 +2,7 @@
 
 use Checkin\Transformers\ConnectionTransformer;
 use Checkin\Transformers\RequiredDetailsTransformer;
+use Checkin\Transformers\ConnectedUsersTransformer;
 
 class ConnectionController extends ApiController {
 
@@ -10,18 +11,21 @@ class ConnectionController extends ApiController {
 	protected $userDetail;
 	protected $connectionTransformer;
 	protected $requiredDetailsTransformer;
+	protected $connectedUsersTransformer;
 
 	public function __construct(User $user,
 	                            UserDetail $userDetail,
 	                            Connection $connection,
 	                            ConnectionTransformer $connectionTransformer,
-	                            RequiredDetailsTransformer $requiredDetailsTransformer)
+	                            RequiredDetailsTransformer $requiredDetailsTransformer,
+	                            ConnectedUsersTransformer $connectedUsersTransformer)
 	{
 		$this->user = $user;
 		$this->userDetail = $userDetail;
 		$this->connection = $connection;
 		$this->connectionTransformer = $connectionTransformer;
 		$this->requiredDetailsTransformer = $requiredDetailsTransformer;
+		$this->connectedUsersTransformer = $connectedUsersTransformer;
 	}
 
 	/*
@@ -39,6 +43,25 @@ class ConnectionController extends ApiController {
 		$connections = $this->connectionTransformer->transformCollection( $connections );
 		return $this->respondWithResults( 'data' , $connections );
 
+	}
+
+	public function connections()
+	{
+
+		$connections = $this->connection->whereUserId( Auth::id() )->pluck('connections');
+
+		if ( ! $connections )
+		{
+			return $this->respondNoResults();
+		}
+
+		// Parse the connections string
+		$connections = $this->connection->explodeStringToArray( $connections );
+		$connections = $this->userDetail->whereIn( 'user_id', $connections )->get()->toArray();
+		
+		// Transform and respond
+		$connections = $this->connectedUsersTransformer->transformCollection( $connections );
+		return $this->respondWithResults('connected_users', $connections);
 	}
 
 	/*

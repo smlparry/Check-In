@@ -24,6 +24,7 @@ Route::group(['prefix' => 'api/v1'], function(){
 
 	// Connection routing
 	Route::group(['before' => 'api.auth'], function(){
+		Route::get('/connections', 'ConnectionController@connections');
 		Route::get('/connect', 'ConnectionController@connect');
 		Route::post('/connect/connection-attempt', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
 		Route::post('/connect/add-details', ['as' => 'addDetails', 'uses' => 'ConnectionController@addDetails'] );
