@@ -14,7 +14,7 @@ class UserDetail extends Eloquent {
 
 	// Table used by the model
 	protected $table = 'user_details';
-	protected $hidden = ['id', 'user_id', 'created_at', 'updated_at'];
+	protected $hidden = ['id', 'created_at', 'updated_at'];
 
 	public function user()
 	{
@@ -161,5 +161,4 @@ class UserDetail extends Eloquent {
 		return $this->whereUserId( Auth::id() )->update( ['custom_details' => $customDetailsString] );
 
 	}
-
 }

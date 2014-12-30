@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder {
 		Connection::truncate();
 		User::truncate();
 		Feed::truncate();
+		UserDetail::truncate();
 
 		Eloquent::unguard();
 

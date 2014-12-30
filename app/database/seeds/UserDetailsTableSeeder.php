@@ -1,25 +1,25 @@
 <?php
 
-Class UserDetailsTableSeeder extends Seeder {
+// Composer: "fzaninotto/faker": "v1.3.0"
+use Faker\Factory as Faker;
 
-	public function run(){
+class UserDetailsTableSeeder extends Seeder {
 
-		// to use non Eloquent-functions we need to unguard
-        Eloquent::unguard();
+	public function run()
+	{
+		$faker = Faker::create();
 
-        // All existing users are deleted !!!
-        DB::table('user_details')->delete();
-
-        // Add the seeded records
-		DB::table('user_details')->insert([
-		                          'user_id' => 1,
-		                          'name' => 'Samuel Parry',
-		                          'address' => 'This address',
-		                          'postcode' => '3216',
-		                          'phone_number' => '0435061054',
-		                          'custom_details' => 'Here go the details'
-					        ]); 
-
+		foreach(range(1, 50) as $index)
+		{
+			UserDetail::create([
+				'user_id' => $index,
+                'name' => $faker->name,
+                'address' => $faker->streetAddress,
+                'postcode' => $faker->postcode,
+                'phone_number' => $faker->phoneNumber,
+                'custom_details' => 'custom,details'
+			]);
+		}
 	}
 
 }

@@ -9,7 +9,7 @@ class FeedTableSeeder extends Seeder {
 	{
 		$faker = Faker::create();
 
-		foreach(range(1, 100) as $index)
+		foreach(range(1, 150) as $index)
 		{
 			Feed::create([
 			   	'user_id' => $faker->numberBetween(1,50),

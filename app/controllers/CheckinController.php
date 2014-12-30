@@ -10,6 +10,7 @@ class CheckinController extends ApiController {
 	protected $user;
 	protected $checkin;
 	protected $userDetail;
+	protected $feed;
 	protected $feedTransformer;
 	protected $historyTransformer;
 	protected $checkinTransformer;
@@ -24,6 +25,7 @@ class CheckinController extends ApiController {
 	public function __construct(User $user,
 	                            Checkin $checkin,
 								UserDetail $userDetail,
+								Feed $feed,
 								HistoryTransformer $historyTransformer,
 								FeedTransformer $feedTransformer,
 								CheckinTransformer $checkinTransformer)
@@ -31,6 +33,7 @@ class CheckinController extends ApiController {
 		$this->user = $user;
 		$this->checkin = $checkin;
 		$this->userDetail = $userDetail;
+		$this->feed = $feed;
 		$this->feedTransformer = $feedTransformer;
 		$this->historyTransformer = $historyTransformer;
 		$this->checkinTransformer = $checkinTransformer;
@@ -146,14 +149,18 @@ class CheckinController extends ApiController {
 	public function feed()
 	{
 
-		$feed = $this->checkin->with('userDetails')->whereParentId( Auth::id() )->get()->toArray();
+		$feed = $this->checkin->whereParentId( Auth::id() )->get()->toArray();
 
 		if ( ! $feed ) 
 		{
 			return $this->respondNoResults();
 		}
 
-		$feed = $this->feedTransformer->transformCollection( $feed );
+		$connectedUsers = $this->feed->connectedUserIds( $feed );
+		$feedUsers = $this->userDetail->whereIn('user_id', $connectedUsers)->get();
+		$feedUsers = $this->feed->feedUserDetails( $feedUsers );
+
+		$feed = $this->feedTransformer->transformCollection( $feed , $feedUsers );
 		return $this->respondWithResults( 'feed_items', $feed );
 
 		// if ( $checkinFeed->verifyGroupId( Auth::id() ) === true ){

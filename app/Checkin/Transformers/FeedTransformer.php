@@ -1,7 +1,14 @@
 <?php namespace Checkin\Transformers;
 
-class FeedTransformer extends Transformer {
-	
+class FeedTransformer {
+		
+	protected $feedUsers;
+
+	public function transformCollection( array $feed, array $feedUsers )
+	{
+		$this->feedUsers = $feedUsers;
+		return array_map( [$this, 'transform'], $feed );
+	}
 	/**
 	 * Transform the feed results into a parsable and readable array WITH user details not just id
 	 * @param  [type] $feed [description]
@@ -9,10 +16,8 @@ class FeedTransformer extends Transformer {
 	 */
 	public function transform( $feed )
 	{	
-		$feed['user_details']['custom_details'] = $this->userDetail->explodeKeyValueStringToArray($feed['user_details']['custom_details']);
-
 		return [
-			'checked_in_user' =>  $feed['user_details'],
+			'checked_in_user' => $this->feedUsers[$feed['user_id']],
 			'checked_in_time' => $feed['created_at']
 		];
 	}
