@@ -172,10 +172,11 @@ class Connection extends Eloquent {
 		// Concatinate the admins current connected users
 		$adminConnections = ConnectedUser::whereUserId( $admin_id )->pluck( 'connected_users' );
 		$adminConnections = $this->concatinateConnections( $adminConnections, $user_id );
-		
+
 		// Add both the records to the database
 		try {
-			$this->where( 'user_id', $user_id )
+
+			$this->whereUserId( $user_id )
 				 ->update( ['connections' => $connections] );
 
 			ConnectedUser::whereUserId( $admin_id )
@@ -184,7 +185,9 @@ class Connection extends Eloquent {
 			return true;
 
 		} catch (Exception $e) {
+
 			return false;
+
 		}
 
 	}
