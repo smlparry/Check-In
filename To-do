@@ -43,7 +43,8 @@ Laracast cool things:
 Things i want to redo
 	- Make and api for viewing feed and stuff like that
 
-New To Do
-	- Add user and parent details to the transformed array. Allow this to be required if needed by passing a variabe? 
-	- Eager load the user in to the feed object
+New To Do API
+	/ Add user and parent details to the transformed array. Allow this to be required if needed by passing a variabe? 
+	/ Eager load the user in to the feed object
+	/ In connection controller you need to return the result of the comparison as an error array, Then also return success if it does pass. Currently just returning array of required details. Transform this into a more readable result. 
 

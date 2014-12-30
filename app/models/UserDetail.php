@@ -32,27 +32,33 @@ class UserDetail extends Eloquent {
 		Put user details database query into an easy to parse array
 		#### Must have user details object passed into function ####
 	 */
-	public function userDetailsToArray( $userDetailsObject )
-	{
-		$userDetailsArray = array(
-		                        'name' => $userDetailsObject->name,
-		                        'address' => $userDetailsObject->address,
-		                        'postcode' => $userDetailsObject->postcode,
-		                        'phone_number' => $userDetailsObject->phone_number
-		                        );
+	public function userDetailsToArray( $userDetails )
+	{	
+		if ( empty($userDetails) )
+		{
+			return null;
+		}
 
+		// Parse custom details and user details array
+		$userDetails = $userDetails->toArray();
+		$customDetails = $this->explodeKeyValueStringToArray( $userDetails['custom_details'] );
+		$userDetails = array_merge($userDetails, $customDetails );
+		unset( $userDetails['custom_details'] );
+
+		return $userDetails;
+
+	}
+
+	public function userDetailsFilterForEmpty( $userDetails )
+	{
 		// Check if any of the details are empty
-		foreach ( $userDetailsArray as $key => $emptyCheck ){
+		foreach ( $userDetails as $key => $emptyCheck ){
 			if ( strlen($emptyCheck) === 0 ){
-				unset( $userDetailsArray[ $key ] );
+				unset( $userDetails[ $key ] );
 			}
 		}
 
-		// add the custom details to the array
-		$customUserDetailsArray = $this->explodeKeyValueStringToArray( $userDetailsObject->custom_details );
-		$userDetailsArray = array_merge( $userDetailsArray, $customUserDetailsArray );
-
-		return $userDetailsArray;
+		return $userDetails;
 	}
 	/*
 		Explode the custom user details strign into an array to be used
@@ -61,16 +67,23 @@ class UserDetail extends Eloquent {
 	public function explodeKeyValueStringToArray( $keyValueString )
 	{
 		$keyValueArray = array();
-		if ( ! empty($keyValueString) ){
-			$keyValueString = trim( $keyValueString, '|' );
-			$keyValues = explode( '|', $keyValueString );
-			foreach ( $keyValues as $keyValue ){
-				$explodedKeyValue = explode( ',', $keyValue );
-				$keyValueArray = array_add( $keyValueArray, $explodedKeyValue['0'], $explodedKeyValue['1'] );
-			}
+
+		if ( ! $keyValueString )
+		{
 			return $keyValueArray;
 		}
+
+		// Trim and exploding
+		$keyValueString = trim( $keyValueString, '|' );
+		$keyValues = explode( '|', $keyValueString );
+
+		foreach ( $keyValues as $keyValue ){
+			$explodedKeyValue = explode( ',', $keyValue );
+			$keyValueArray = array_add( $keyValueArray, $explodedKeyValue['0'], $explodedKeyValue['1'] );
+		}
+
 		return $keyValueArray;
+
 	}
 	/*
 		Parses the required details array for the default values that may need to be added
@@ -78,20 +91,23 @@ class UserDetail extends Eloquent {
 		This does not check if they are 'not specified' or not
 		Check if the user has not filled out the default user details (name, address, postcode, phone_number)
 	 */
-	public function parseForEmptyDefault( $array )
+	public function parseForRequiredDefault( $array )
 	{
-		$defaultDetails = array('name', 'address', 'postcode', 'phone_number');
+		$toUpdate = null;
+		$defaultDetails = ['name', 'address', 'postcode', 'phone_number'];
+
 		foreach( $defaultDetails as $detail ){
-			if ( $updateDefault[$detail] = array_pull( $array, $detail ) !== null ){
+			if ( $updateDefault[ $detail ] = array_pull( $array, $detail ) !== null ){
 				$toUpdate[] = $detail;
 			}
 		}
 
-		if ( ! empty($toUpdate) ){
+		if ( $toUpdate )
+		{
 			return $toUpdate;
 		}
 
-		return false;
+		return null;
 	}
 	/*
 		Update the users default values
@@ -123,9 +139,15 @@ class UserDetail extends Eloquent {
 	 */
 	public function concatinateCustomDetails( $currentCustomDetails, $array )
 	{
+		if ( $currentCustomDetails )
+		{
+			$currentCustomDetails = trim( $currentCustomDetails, '|' );
+		}
+
 		foreach ( $array as $key => $value ){
 			$currentCustomDetails = $currentCustomDetails. '|' . $key . ',' . $value;
 	 	}
+
 	 	$customDetailsString = trim($currentCustomDetails, '|');
 
 	 	return $customDetailsString;
@@ -136,7 +158,7 @@ class UserDetail extends Eloquent {
 	 */
 	public function addNewCustomDetails( $customDetailsString )
 	{
-		return $this->where( 'user_id' , Auth::id() )->update( ['custom_details' => $customDetailsString] );
+		return $this->whereUserId( Auth::id() )->update( ['custom_details' => $customDetailsString] );
 
 	}
 

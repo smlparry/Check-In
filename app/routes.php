@@ -2,7 +2,7 @@
 
 // // Event listener
 // Event::listen('illuminate.query', function($query){
-// 	var_dump($query);
+// 	echo $query . PHP_EOL;
 // });
 
 // Main Pages
@@ -26,7 +26,7 @@ Route::group(['prefix' => 'api/v1'], function(){
 	Route::group(['before' => 'api.auth'], function(){
 		Route::get('/connect', 'ConnectionController@connect');
 		Route::post('/connect/connection-attempt', ['as' => 'addConnection', 'uses' => 'ConnectionController@addConnection'] );
-		Route::post('/connect/addRequiredDetails', ['as' => 'addRequiredDetails', 'uses' => 'ConnectionController@addRequiredDetails'] );
+		Route::post('/connect/add-details', ['as' => 'addDetails', 'uses' => 'ConnectionController@addDetails'] );
 	});
 	
 

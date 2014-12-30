@@ -174,17 +174,24 @@ class Connection extends Eloquent {
 	{
 		$missingDetails = null;
 
+		if ( ! $requiredDetails )
+		{
+			return true;
+		}
+
+		// Loop over required details
 		foreach( $requiredDetails as $requiredDetail ){
 			if ( $hasDetails[$requiredDetail] = array_pull( $userDetails, $requiredDetail ) === null ){
 				$missingDetails[] = $requiredDetail;
 			}
 		}
 
-		if ( empty( $missingDetails )){
-			return true;
+		if ( $missingDetails )
+		{
+			return $missingDetails;
 		}
 
-		return $missingDetails;
+		return true;
 
 	}
 	/*
@@ -193,7 +200,7 @@ class Connection extends Eloquent {
 	public function makeRequiredRules( $details )
 	{
 		if ( count($details) !== 0 ){
-			$rules = array();
+			$rules = [];
 			foreach( $details as $key => $value ){
 				$rules = array_add($rules, $key, 'required');
 			}
@@ -212,7 +219,7 @@ class Connection extends Eloquent {
 			return true;
 		}
 
-		return $validation->messages();
+		return $validation->messages()->toArray();
 
 	}
 

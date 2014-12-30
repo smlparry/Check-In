@@ -92,7 +92,7 @@ class ApiController extends \BaseController {
 		return $this->setStatusCode(403)->respondWithError( $message );
 	}
 
-	public function respondInvalidRequest( $message = 'Additional arguments need to be supplied')
+	public function respondInvalidRequest( $message = 'Additional arguments need to be supplied' )
 	{
 		return $this->setStatusCode(412)->respondWithError( $message );
 	}
@@ -102,4 +102,13 @@ class ApiController extends \BaseController {
 		return $this->setStatusCode(200)->respondWithSuccess( $message, $adminObject );
 	}
 
+	public function respondWithRequiredDetails( $requiredDetails )
+	{
+		return $this->setStatusCode(412)->respondWithResults( 'required_details', $requiredDetails );
+	}
+
+	public function respondNoUserDetailsFound( $message = 'No user details found for user attempting to connect')
+	{
+		return $this->setStatusCode(412)->respondWithError( $message );
+	}
 }

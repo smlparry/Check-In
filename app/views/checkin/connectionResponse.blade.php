@@ -12,7 +12,7 @@
 		<p>The place you are trying to connect to requires more details about you</p>
 		<p>They require:</p>
 		<ul>
-			{{ Form::open( ['route' => 'addRequiredDetails', 'class' => 
+			{{ Form::open( ['route' => 'addDetails', 'class' => 
 				'form-horizontal'] ) }}
 
 				@foreach($response as $requiredDetail)
