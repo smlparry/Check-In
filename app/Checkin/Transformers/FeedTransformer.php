@@ -16,8 +16,11 @@ class FeedTransformer {
 	 */
 	public function transform( $feed )
 	{	
+		$userKey = $feed['user_id'];
+		unset( $this->feedUsers[$userKey]['user_id'] );
+
 		return [
-			'checked_in_user' => $this->feedUsers[$feed['user_id']],
+			'checked_in_user' => $this->feedUsers[$userKey],
 			'checked_in_time' => $feed['created_at']
 		];
 	}

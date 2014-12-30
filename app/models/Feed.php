@@ -18,7 +18,6 @@ class Feed extends \Eloquent {
 		foreach( $feedUsers as $userDetails )
 		{
 			$userDetails->custom_details = $this->userDetail->explodeKeyValueStringToArray( $userDetails->custom_details ); 
-			
 			$feedUserDetails = array_add( $feedUserDetails, $userDetails->user_id, $userDetails->toArray() ); 
 		}
 
