@@ -2,6 +2,7 @@
 
 class Connection extends Eloquent {
 
+
 	protected $fillable = array('user_id', 'connections');
 	
 	public function userDetail()
@@ -163,10 +164,28 @@ class Connection extends Eloquent {
 	public function addConnection( $user_id, $admin_id )
 	{
 		settype($admin_id, 'integer');
-		$currentConnections = $this->where( 'user_id', $user_id )->pluck( 'connections' );
-		$concatinatedConnections = $this->concatinateConnections( $currentConnections, $admin_id );
-		$this->where( 'user_id', $user_id )->update( ['connections' => $concatinatedConnections] );
-		return true;
+
+		// Concatinate the users current connections
+		$connections = $this->where( 'user_id', $user_id )->pluck( 'connections' );
+		$connections = $this->concatinateConnections( $connections, $admin_id );
+
+		// Concatinate the admins current connected users
+		$adminConnections = ConnectedUser::whereUserId( $admin_id )->pluck( 'connected_users' );
+		$adminConnections = $this->concatinateConnections( $adminConnections, $user_id );
+		
+		// Add both the records to the database
+		try {
+			$this->where( 'user_id', $user_id )
+				 ->update( ['connections' => $connections] );
+
+			ConnectedUser::whereUserId( $admin_id )
+				 ->update( ['connected_users' => $adminConnections ] );
+
+			return true;
+
+		} catch (Exception $e) {
+			return false;
+		}
 
 	}
 	/*

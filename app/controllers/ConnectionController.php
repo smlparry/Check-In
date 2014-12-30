@@ -69,6 +69,13 @@ class ConnectionController extends ApiController {
 			return $this->respondAccessDenied( 'Cannot connect to yourself.' );
 		}
 
+		$admin = $this->user->with('userDetails')->find( $adminId )->toArray();
+
+		if ( $admin['group_id'] !== 2 )
+		{
+			return $this->respondAccessDenied();
+		}
+
 		// User details to array
 		$userDetails = $this->userDetail->whereUserId( $userId )->first();
 		$userDetails = $this->userDetail->userDetailsFilterForEmpty( $this->userDetail->userDetailsToArray( $userDetails ) );
@@ -94,7 +101,7 @@ class ConnectionController extends ApiController {
 		// Add the connection
 		$this->connection->addConnection( $userId, $adminId );
 
-		return $this->respondWithSuccess( 'Successfully connected to ' . $this->userDetail->whereUserId( $adminId )->first()->name, $comparisonResult );
+		return $this->respondWithSuccess( 'Successfully connected to ' . $admin['user_details']['name'], $comparisonResult );
 
 	}
 
