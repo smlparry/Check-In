@@ -35,7 +35,7 @@ class AdminController extends ApiController {
 	{
 
 		$connectedUsers = $this->connectedUser->whereUserId( Auth::id() )->pluck('connected_users');
-		dd($connectedUsers);
+
 		if ( ! $connectedUsers )
 		{
 			return $this->respondNoResults();
